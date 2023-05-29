@@ -1,0 +1,5 @@
+{
+    "sketch": "src\\src.ino",
+    "board": "arduino:avr:uno",
+    "programmer": "avrisp"
+}
