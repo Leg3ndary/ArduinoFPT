@@ -42,6 +42,13 @@ Memory used: 2 bytes
 */
 int state = 0;
 
+/*
+Refresh is how many milliseconds between each refresh of checking the Inputs
+Speed is how fast it takes to get to the next LED
+*/
+int refresh = 4;
+const int speeds[10] = {500, 460, 420, 380, 340, 320, 300, 280, 260, 248};
+
 // Setting up the pins, all the pins for the bit shifters are outputs.
 void setup() {
   for (int i = 0; i < 4; i++) {
@@ -53,29 +60,28 @@ void setup() {
   pinMode(interact, INPUT);
 }
 
-void loop() {
-  if (state == 0) {
-    // pass for now
-  } else if (state == 1)
-  {
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 8; j++) {
-        // Set latchPin low to allow data flow
-        digitalWrite(latches[i], LOW); 
-        shiftOut(bits[j], i);
-        // Set latchPin to high to lock and send data
-        digitalWrite(latches[i], HIGH);
-        delay(50);
-      }
+void handleSpin() {
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 8; j++) {
       // Set latchPin low to allow data flow
       digitalWrite(latches[i], LOW); 
-      shiftOut(1, i);
+      shiftOut(bits[j], i);
       // Set latchPin to high to lock and send data
       digitalWrite(latches[i], HIGH);
+      
+      // delay(2);
+      
+      if (digitalRead(start) == HIGH) {
+        
+      }
     }
+    // Set latchPin low to allow data flow
+    digitalWrite(latches[i], LOW); 
+    shiftOut(1, i);
+    // Set latchPin to high to lock and send data
+    digitalWrite(latches[i], HIGH);
   }
 }
-
 
 void shiftOut(byte dataOut, int bitShifter) {
   // Shift out 8 bits LSB first, on rising edge of clock
@@ -100,4 +106,17 @@ void shiftOut(byte dataOut, int bitShifter) {
   }
   // Stop shifting out data
   digitalWrite(clocks[bitShifter], LOW);
+}
+
+void loop() {
+  if (state == 0) {
+    // pass for now
+  } else if (state == 1)
+  {
+    handleSpin();
+  } else if (state == 2) {
+
+  } else {
+    state = 0;
+  }
 }
