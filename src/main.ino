@@ -15,6 +15,8 @@ const int datas[3] = {13, 10, 7};
 const int latches[3] = {12, 9, 6};
 const int clocks[3] = {11, 8, 5};
 
+const int bits[8] = {128, 64, 32, 16, 8, 4, 2, 1};
+
 /* State is what state the game is in.
 0: Home Screen
 - LEDs will be flashing randomly maybe we add patterns
@@ -28,7 +30,7 @@ const int clocks[3] = {11, 8, 5};
 
 Memory used: 2 bytes
 */
-int state = 0;
+int state = 1; // should be 0 normally
 
 // Setting up the pins, all the pins for the bit shifters are outputs.
 void setup() {
@@ -48,20 +50,34 @@ void loop() {
   //   digitalWrite(latchPin, HIGH);
   //   delay(100);
   // }
-  if (state == 0)
+  if (state == 0) {
+    // pass for now
+  } else if (state == 1)
+  {
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 8; j++) {
+        // Set latchPin low to allow data flow
+        digitalWrite(latches[i], LOW); 
+        shiftOut(bits[j], i);
+        // Set latchPin to high to lock and send data
+        digitalWrite(latches[i], HIGH);
+        delay(50);
+      }
+    }
+  }
 }
 
 
-void shiftOut(byte dataOut) {
+void shiftOut(byte dataOut, int bitShifter) {
   // Shift out 8 bits LSB first, on rising edge of clock
   boolean pinState;
   // Clear shift register ready for sending data
-  digitalWrite(dataPin, LOW);
-  digitalWrite(clockPin, LOW);
+  digitalWrite(datas[bitShifter], LOW);
+  digitalWrite(clocks[bitShifter], LOW);
   // For each bit in dataOut send out a bit
   for (int i = 0; i <= 7; i++) {
     // Set clockPin to LOW prior to sending bit
-    digitalWrite(clockPin, LOW);
+    digitalWrite(clocks[bitShifter], LOW);
     // If the value of DataOut and (logical AND) a bitmask are true, set pinState to 1 (HIGH)
     if (dataOut & (1 << i)) {
       pinState = HIGH;
@@ -69,10 +85,10 @@ void shiftOut(byte dataOut) {
       pinState = LOW;
     }
     // Sets dataPin to HIGH or LOW depending on pinState
-    digitalWrite(dataPin, pinState);
+    digitalWrite(datas[bitShifter], pinState);
     // Send bit out on rising edge of clock
-    digitalWrite(clockPin, HIGH);
+    digitalWrite(clocks[bitShifter], HIGH);
   }
   // Stop shifting out data
-  digitalWrite(clockPin, LOW);
+  digitalWrite(clocks[bitShifter], LOW);
 }
