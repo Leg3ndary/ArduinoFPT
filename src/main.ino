@@ -9,12 +9,22 @@ Datas is pins connected to Pin 14 of 74HC595 (BLUE)
 Latches is pins connected to Pin 12 of 74HC595 (GREEN)
 Clocks is pins connected to Pin 11 of 74HC595 (YELLOW)
 
-Total Memory used here = 3 * 3 * 2 = 18 bytes
-*/
-const int datas[3] = {13, 10, 7};
-const int latches[3] = {12, 9, 6};
-const int clocks[3] = {11, 8, 5};
+start is the start button. (Start)
+interact is the interaction button. (X)
 
+Total Memory used here = 4 * 3 * 2 = 24 bytes
+*/
+const int datas[4] = {13, 10, 7, 4};
+const int latches[4] = {12, 9, 6, 3};
+const int clocks[4] = {11, 8, 5, 2};
+
+const int start = 14;
+const int interact = 15;
+// Speaker pins are 18 and 19
+
+/*
+The bits that are being shifted out in time
+*/
 const int bits[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 
 /* State is what state the game is in.
@@ -30,31 +40,25 @@ const int bits[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 
 Memory used: 2 bytes
 */
-int state = 1; // should be 0 normally
+int state = 0;
 
 // Setting up the pins, all the pins for the bit shifters are outputs.
 void setup() {
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 4; i++) {
     pinMode(datas[i], OUTPUT);
     pinMode(latches[i], OUTPUT);
     pinMode(clocks[i], OUTPUT);
   }
+  pinMode(start, INPUT);
+  pinMode(interact, INPUT);
 }
 
 void loop() {
-  // for (int i = 0; i < 8; i++) {
-  //   // Set latchPin low to allow data flow
-  //   digitalWrite(latchPin, LOW); 
-  //   shiftOut(bits[i]);
-  //   // Set latchPin to high to lock and send data
-  //   digitalWrite(latchPin, HIGH);
-  //   delay(100);
-  // }
   if (state == 0) {
     // pass for now
   } else if (state == 1)
   {
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 8; j++) {
         // Set latchPin low to allow data flow
         digitalWrite(latches[i], LOW); 
@@ -63,6 +67,11 @@ void loop() {
         digitalWrite(latches[i], HIGH);
         delay(50);
       }
+      // Set latchPin low to allow data flow
+      digitalWrite(latches[i], LOW); 
+      shiftOut(1, i);
+      // Set latchPin to high to lock and send data
+      digitalWrite(latches[i], HIGH);
     }
   }
 }
