@@ -15,17 +15,13 @@ interact is the interaction button. (X)
 Total Memory used here = 4 * 3 * 2 = 24 bytes
 */
 const int datas[4] = {13, 10, 7, 4};
-const int latches[4] = {12, 9, 6, 3};
-const int clocks[4] = {11, 8, 5, 2};
+const int latches[4] = {12, 9, 6, 14};
+const int clocks[4] = {11, 8, 5, 15};
 
-const int start = 14;
-const int interact = 15;
+const int start = 3;
+const int interact = 2;
 const int speaker1 = 18;
 const int speaker2 = 19;
-
-/*
-The bits that are being shifted out in time
-*/
 const int bits[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 
 /* State is what state the game is in.
@@ -41,7 +37,11 @@ const int bits[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 
 Memory used: 2 bytes
 */
-int state = 0;
+int state = 1;
+int ledNum = 0;
+bool clockwise = true;
+volatile int startState = 0;
+volatile int interactState = 0;
 
 /*
 Refresh is how many milliseconds between each refresh of checking the Inputs
@@ -65,28 +65,24 @@ void setup() {
   pinMode(interact, INPUT_PULLUP);
   pinMode(speaker1, OUTPUT);
   pinMode(speaker2, OUTPUT);
+
+  attachInterrupt(digitalPinToInterrupt(start), startISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(interact), interactISR, CHANGE);
 }
 
-void handleSpin() {
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 8; j++) {
-      // Set latchPin low to allow data flow
-      digitalWrite(latches[i], LOW); 
-      shiftOut(bits[j], i);
-      // Set latchPin to high to lock and send data
-      digitalWrite(latches[i], HIGH);
-      
-      // delay(2);
-      
-      if (digitalRead(start) == HIGH) {
-        
-      }
-    }
-    // Set latchPin low to allow data flow
-    digitalWrite(latches[i], LOW); 
-    shiftOut(1, i);
-    // Set latchPin to high to lock and send data
-    digitalWrite(latches[i], HIGH);
+void startISR() {
+  if (digitalRead(start) == HIGH) {
+    startState = 1;
+  } else {
+    startState = 0;
+  }
+}
+
+void interactISR() {
+  if (digitalRead(interact) == HIGH) {
+    interactState = 1;
+  } else {
+    interactState = 0;
   }
 }
 
@@ -120,7 +116,28 @@ void loop() {
     // pass for now
   } else if (state == 1)
   {
-    handleSpin();
+    int bitShifter = ledNum / 4;
+    int bit = ledNum % 8;
+    // Set latchPin low to allow data flow
+    digitalWrite(latches[bitShifter], LOW); 
+    shiftOut(bits[bit], bitShifter);
+    // Set latchPin to high to lock and send data
+    digitalWrite(latches[bitShifter], HIGH);
+
+    delay(50);
+
+    if (bit == 7) {
+      // Set latchPin low to allow data flow
+      digitalWrite(latches[bitShifter], LOW); 
+      shiftOut(1, bitShifter);
+      // Set latchPin to high to lock and send data
+      digitalWrite(latches[bitShifter], HIGH);
+    }
+
+    ledNum++;
+    if (ledNum == 28) {
+      ledNum = 0;
+    }
   } else if (state == 2) {
 
   } else {
