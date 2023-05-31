@@ -40,8 +40,8 @@ Memory used: 2 bytes
 int state = 1;
 int ledNum = 0;
 volatile bool clockwise = true;
-volatile int startState = 0;
-volatile int interactState = 0;
+byte startState = HIGH;
+byte interactState = HIGH;
 
 /*
 Refresh is how many milliseconds between each refresh of checking the Inputs
@@ -62,13 +62,10 @@ void setup() {
     pinMode(latches[i], OUTPUT);
     pinMode(clocks[i], OUTPUT);
   }
-  pinMode(start, INPUT_PULLUP);
-  pinMode(interact, INPUT_PULLUP);
+  pinMode(start, INPUT);
+  pinMode(interact, INPUT);
   pinMode(speaker1, OUTPUT);
   pinMode(speaker2, OUTPUT);
-
-  attachInterrupt(digitalPinToInterrupt(start), startISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(interact), interactISR, CHANGE);
 }
 
 void startISR() {
@@ -110,6 +107,11 @@ void shiftOut(byte dataOut, int bitShifter) {
 }
 
 void loop() {
+  // Clock delay
+  delay(1);
+  startState = digitalRead(start);
+  interactState = digitalRead(interact);
+
   if (state == 0) {
     // pass for now
   } else if (state == 1)
