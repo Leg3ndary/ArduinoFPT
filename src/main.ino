@@ -20,7 +20,8 @@ const int clocks[4] = {11, 8, 5, 2};
 
 const int start = 14;
 const int interact = 15;
-// Speaker pins are 18 and 19
+const int speaker1 = 18;
+const int speaker2 = 19;
 
 /*
 The bits that are being shifted out in time
@@ -47,17 +48,23 @@ Refresh is how many milliseconds between each refresh of checking the Inputs
 Speed is how fast it takes to get to the next LED
 */
 int refresh = 4;
-const int speeds[10] = {500, 460, 420, 380, 340, 320, 300, 280, 260, 248};
+const int speeds[10] = {720, 660, 580, 480, 360, 320, 300, 280, 260, 248};
 
-// Setting up the pins, all the pins for the bit shifters are outputs.
+/*
+Setting up all the pins.
+Output pins are all the bitShifter pins, as well as the speakers.
+INPUT_PULLUP uses the inbuilt resistors to allow us not to use resistors for start and interact.
+*/
 void setup() {
   for (int i = 0; i < 4; i++) {
     pinMode(datas[i], OUTPUT);
     pinMode(latches[i], OUTPUT);
     pinMode(clocks[i], OUTPUT);
   }
-  pinMode(start, INPUT);
-  pinMode(interact, INPUT);
+  pinMode(start, INPUT_PULLUP);
+  pinMode(interact, INPUT_PULLUP);
+  pinMode(speaker1, OUTPUT);
+  pinMode(speaker2, OUTPUT);
 }
 
 void handleSpin() {
