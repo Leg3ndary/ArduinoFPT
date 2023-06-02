@@ -64,7 +64,7 @@ int gameRunLR = 0;
 Setting up all the pins to the correct mode.
 */
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600); // dele this after debugging
   for (int i = 0; i < 4; i++) {
     pinMode(dataPins[i], OUTPUT);
     pinMode(latchPins[i], OUTPUT);
@@ -102,6 +102,7 @@ void shiftOut(byte dataOut, int bitShifter) {
   digitalWrite(clockPins[bitShifter], LOW);
 }
 
+// Clears all Led's of state (not really, explained later)
 void clearLeds() {
   for (int i = 0; i < 4; i++) {
     digitalWrite(latchPins[i], LOW);
@@ -110,6 +111,7 @@ void clearLeds() {
   }
 }
 
+// Specific rendering for difficulty at the start of the game.  
 void renderDifficulty() {
   for (int i = 0; i < 4; i++) {
     digitalWrite(latchPins[i], LOW); 
@@ -124,7 +126,7 @@ void gameRun() {
 
   if (!lastInteractState && interactState) {
     if (currentLed == targetLed) {
-      score += ((difficulty + 1) * 1.5);
+      score++;
       clockwise = !clockwise;
     } else {
       state++;
@@ -132,7 +134,7 @@ void gameRun() {
     }
   }
 
-  if (currentTime - gameRunLR >= speeds[difficulty]) {
+  if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
     clearLeds();
     // Set latchPin low to allow data flow
     digitalWrite(latchPins[bitShifter], LOW); 
