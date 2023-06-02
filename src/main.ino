@@ -15,17 +15,43 @@ const int interactButton = 15;
 const int speakerPin = 19;
 
 const int bits[8] = {128, 64, 32, 16, 8, 4, 2, 1};
-const int speeds[9] = {660, 580, 480, 360, 320, 300, 280, 260, 245};
+const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
+const int difficultyLeds[7][4] = {
+  {
+    240, 0, 0, 0
+  },
+  {
+    255, 128, 0, 0
+  },
+  {
+    255, 248, 0, 0
+  },
+  {
+    255, 255, 192, 0 
+  },
+  {
+    255, 255, 252, 0
+  },
+  {
+    255, 255, 255, 224
+  },
+  {
+    255, 255, 255, 255
+  }
+};
 
 /*
 The following are all things that might change throughout the program
 */
-int state = 1;
+int score = 0;
+int state = 0;
+int difficulty = 0;
 bool clockwise = true;
 
 int currentLed = 0;
-int currentSpeed = speeds[0];
 int currentTime = 0;
+
+int targetLed;
 
 int startState = 0;
 int lastStartState = 0;
@@ -47,6 +73,8 @@ void setup() {
   pinMode(startButton, INPUT);
   pinMode(interactButton, INPUT);
   pinMode(speakerPin, OUTPUT);
+
+  renderDifficulty();
 }
 
 void shiftOut(byte dataOut, int bitShifter) {
@@ -82,14 +110,29 @@ void clearLeds() {
   }
 }
 
-void gameStart() {
-
+void renderDifficulty() {
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(latchPins[i], LOW); 
+    shiftOut(difficultyLeds[difficulty][i], i);
+    digitalWrite(latchPins[i], HIGH);
+  }
 }
 
 void gameRun() {
-  if (currentTime - gameRunLR >= currentSpeed) {
-    int bitShifter = currentLed / 7;
-    int bit = currentLed % 7;
+  int bitShifter = currentLed / 7;
+  int bit = currentLed % 7;
+
+  if (!lastInteractState && interactState) {
+    if (currentLed == targetLed) {
+      score += ((difficulty + 1) * 1.5);
+      clockwise = !clockwise;
+    } else {
+      state++;
+      return;
+    }
+  }
+
+  if (currentTime - gameRunLR >= speeds[difficulty]) {
     clearLeds();
     // Set latchPin low to allow data flow
     digitalWrite(latchPins[bitShifter], LOW); 
@@ -123,12 +166,18 @@ void loop() {
   interactState = digitalRead(interactButton);
 
   if (state == 0) {
-    gameStart();
+    if (!lastInteractState && interactState) {
+      difficulty++;
+      if (difficulty > 6) {
+        difficulty = 0;
+      }
+      renderDifficulty();
+    }
+    if(!lastStartState && startState) {
+      state++;
+    }
   } else if (state == 1)
   {
-    if (!lastInteractState && interactState) {
-      clockwise = !clockwise;
-    }
     gameRun();
   } else if (state == 2) {
     gameOver();
