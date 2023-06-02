@@ -25,30 +25,23 @@ const int speaker2 = 19;
 const int bits[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 
 /* State is what state the game is in.
-0: Home Screen
-- LEDs will be flashing randomly maybe we add patterns
-- Piezos will be playing some random music
-
-1: In game
-- LEDs will be moving around in until it hits the goal
-
-2: Game over
-- Has to push reset to be brought to home screen
-
-Memory used: 2 bytes
-*/
-int state = 1;
-int ledNum = 0;
-volatile bool clockwise = true;
-volatile int startState = 0;
-volatile int interactState = 0;
-
-/*
 Refresh is how many milliseconds between each refresh of checking the Inputs
 Speed is how fast it takes to get to the next LED
 */
-int refresh = 4;
-const int speeds[10] = {720, 660, 580, 480, 360, 320, 300, 280, 260, 248};
+int state = 1;
+int currentLed = 0;
+bool clockwise = true;
+
+int refresh = 5;
+const int speeds[9] = {660, 580, 480, 360, 320, 300, 280, 260, 245};
+int currentSpeed = speeds[0];
+int currentTime = 0;
+
+int startState = 0;
+int interactState = 0;
+int lastInteractState = 0;
+
+int gameRunLR = 0;
 
 /*
 Setting up all the pins.
@@ -62,26 +55,10 @@ void setup() {
     pinMode(latches[i], OUTPUT);
     pinMode(clocks[i], OUTPUT);
   }
-  pinMode(start, INPUT_PULLUP);
-  pinMode(interact, INPUT_PULLUP);
+  pinMode(start, INPUT);
+  pinMode(interact, INPUT);
   pinMode(speaker1, OUTPUT);
   pinMode(speaker2, OUTPUT);
-
-  attachInterrupt(digitalPinToInterrupt(start), startISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(interact), interactISR, CHANGE);
-}
-
-void startISR() {
-  clockwise = !clockwise;
-  Serial.println(clockwise);
-}
-
-void interactISR() {
-  if (digitalRead(interact) == HIGH) {
-    interactState = 1;
-  } else {
-    interactState = 0;
-  }
 }
 
 void shiftOut(byte dataOut, int bitShifter) {
@@ -109,52 +86,68 @@ void shiftOut(byte dataOut, int bitShifter) {
   digitalWrite(clocks[bitShifter], LOW);
 }
 
-void loop() {
-  if (state == 0) {
-    // pass for now
-  } else if (state == 1)
-  {
-    int bitShifter = ledNum / 7;
-    int bit = ledNum % 7;
+void clearLeds() {
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(latches[i], LOW);
+    shiftOut(1, i);
+    digitalWrite(latches[i], HIGH);
+  }
+}
+
+void gameStart() {
+
+}
+
+void gameRun() {
+  if (currentTime - gameRunLR >= currentSpeed) {
+    int bitShifter = currentLed / 7;
+    int bit = currentLed % 7;
+    clearLeds();
     // Set latchPin low to allow data flow
     digitalWrite(latches[bitShifter], LOW); 
     shiftOut(bits[bit], bitShifter);
     // Set latchPin to high to lock and send data
     digitalWrite(latches[bitShifter], HIGH);
 
-    delay(50);
-
     if (clockwise) {
-      ledNum++;
-      if (ledNum == 28) {
-        ledNum = 0;
-      }
-      if (bit == 6) {
-        // Set latchPin low to allow data flow
-        digitalWrite(latches[bitShifter], LOW); 
-        shiftOut(1, bitShifter);
-        // Set latchPin to high to lock and send data
-        digitalWrite(latches[bitShifter], HIGH);
+      currentLed++;
+      if (currentLed == 28) {
+        currentLed = 0;
       }
     } else {
-      ledNum--;
-      if (ledNum == -1) {
-        ledNum = 27;
-      }
-      if (bit == 0) {
-        // Set latchPin low to allow data flow
-        digitalWrite(latches[bitShifter], LOW); 
-        shiftOut(1, bitShifter);
-        // Set latchPin to high to lock and send data
-        digitalWrite(latches[bitShifter], HIGH);
+      currentLed--;
+      if (currentLed == -1) {
+        currentLed = 27;
       }
     }
 
-    
+    gameRunLR = currentTime;
+  }
+}
 
+void gameOver() {
+
+}
+
+void loop() {
+  currentTime = millis();
+  startState = digitalRead(start);
+  interactState = digitalRead(interact);
+
+  if (state == 0) {
+    gameStart();
+  } else if (state == 1)
+  {
+    if (!lastInteractState && interactState) {
+      Serial.println(!clockwise);
+      clockwise = !clockwise;
+    }
+    gameRun();
   } else if (state == 2) {
-
+    gameOver();
   } else {
     state = 0;
   }
+
+  lastInteractState = interactState;
 }
