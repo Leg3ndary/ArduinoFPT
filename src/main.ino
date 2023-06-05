@@ -12,6 +12,7 @@ const int latchPins[4] = {12, 9, 6, 3};
 const int clockPins[4] = {11, 8, 5, 2};
 const int startButton = 14;
 const int interactButton = 15;
+const int seedPin = 18;
 const int speakerPin = 19;
 
 const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
@@ -50,7 +51,7 @@ bool clockwise = true;
 int currentLed = 0;
 int currentTime = 0;
 
-int targetLed;
+int targetLed = random(8, 28);
 
 int startState = 0;
 int lastStartState = 0;
@@ -58,6 +59,7 @@ int interactState = 0;
 int lastInteractState = 0;
 
 int gameRunLR = 0;
+int result[4] = {0, 0, 0, 0};
 
 /*
 Setting up all the pins to the correct mode.
@@ -74,30 +76,39 @@ void setup() {
   pinMode(speakerPin, OUTPUT);
 
   renderDifficulty();
+  randomSeed(analogRead(seedPin));
 }
 
-int* convert(int leds[]) {
-  int result[] = {0, 0, 0, 0};
-  
+int customPower(int exponent) {
+  int result = 2;
+  for (int i = 0; i < exponent; i++) {
+    result *= 2;
+  }
+  return result;
+}
+
+int* convert(int* leds) {
   int binary[4][7] = {
-      {0, 0, 0, 0, 0, 0, 0},
-      {0, 0, 0, 0, 0, 0, 0},
-      {0, 0, 0, 0, 0, 0, 0},
-      {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
   };
 
-  for (int i = 0; i < sizeof(leds) / sizeof(leds[0]); i++) {
-      int bitShifter = i / 7;
-      int bit = i % 7;
-      binary[bitShifter][bit] = leds[i];
+  for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]); i++) {
+    int bitShifter = leds[i] / 7;
+    int bit = leds[i] % 7;
+    binary[bitShifter][bit] = 1;
   }
 
   for (int i = 0; i < 4; i++) {
-      int decimal = 0;
-      for(int j = 0 ; j < 8 ; j++) {
-          decimal = (decimal << 1) + binary[i][j];
+    int decimal = 255;
+    for (int j = 0 ; j < 7 ; j++) {
+      if (binary[i][j] == 0) {
+        decimal -= customPower(6 - j);
       }
-      result[i] = decimal;
+    }
+    result[i] = decimal;
   }
   
   return result;
@@ -147,33 +158,33 @@ void renderDifficulty() {
 }
 
 void gameRun() {
-  int bitShifter = currentLed / 7;
-  int bit = currentLed % 7;
-
   if (!lastInteractState && interactState) {
     if (currentLed == targetLed) {
       score++;
       clockwise = !clockwise;
+      targetLed = random(0, 28);
+      Serial.print("hit");
     } else {
+      Serial.print("missed");
+      Serial.print(currentLed);
+      Serial.print(targetLed);
       state++;
       return;
     }
   }
 
   if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
-    
-    int toConvert[] = {targetLed, currentLed};
+    int toConvert[] = {currentLed, targetLed};
     int* converted = convert(toConvert);
 
     for (int i = 0; i < 4; i++) {
       // Set latchPin low to allow data flow
-      digitalWrite(latchPins[bitShifter], LOW);
+      digitalWrite(latchPins[i], LOW);
       
-      shiftOut(converted[i], bitShifter);
+      shiftOut(converted[i], i);
       // Set latchPin to high to lock and send data
-      digitalWrite(latchPins[bitShifter], HIGH);
+      digitalWrite(latchPins[i], HIGH);
     }
-    
 
     if (clockwise) {
       currentLed++;
