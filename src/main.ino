@@ -165,9 +165,13 @@ void renderDifficulty() {
 
 void gameRun() {
   if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
-    Serial.println(targetLedS);
     int toConvert[] = {currentLed, targetLed, targetLedS};
+    
     int* converted = convert(toConvert);
+    Serial.println(converted[0]);
+    Serial.println(converted[1]);
+    Serial.println(converted[2]);
+    Serial.println(converted[3]);
 
     for (int i = 0; i < 4; i++) {
       // Set latchPin low to allow data flow
