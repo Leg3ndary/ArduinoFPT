@@ -51,7 +51,8 @@ bool clockwise = true;
 int currentLed = 0;
 int currentTime = 0;
 
-int targetLed = random(8, 28);
+int targetLed = random(8, 27);
+int targetLedS = targetLed + 1;
 
 int startState = 0;
 int lastStartState = 0;
@@ -77,6 +78,11 @@ void setup() {
 
   renderDifficulty();
   randomSeed(analogRead(seedPin));
+}
+
+void generateTargets(int current) {
+  targetLed = random(current + 5, current + 24) % 28;
+  targetLedS = (targetLed + 1) % 28;
 }
 
 int customPower(int exponent) {
@@ -158,23 +164,9 @@ void renderDifficulty() {
 }
 
 void gameRun() {
-  if (!lastInteractState && interactState) {
-    if (currentLed == targetLed) {
-      score++;
-      clockwise = !clockwise;
-      targetLed = random(0, 28);
-      Serial.print("hit");
-    } else {
-      Serial.print("missed");
-      Serial.print(currentLed);
-      Serial.print(targetLed);
-      state++;
-      return;
-    }
-  }
-
   if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
-    int toConvert[] = {currentLed, targetLed};
+    Serial.println(targetLedS);
+    int toConvert[] = {currentLed, targetLed, targetLedS};
     int* converted = convert(toConvert);
 
     for (int i = 0; i < 4; i++) {
@@ -188,17 +180,25 @@ void gameRun() {
 
     if (clockwise) {
       currentLed++;
-      if (currentLed == 28) {
-        currentLed = 0;
-      }
     } else {
       currentLed--;
-      if (currentLed == -1) {
-        currentLed = 27;
-      }
     }
+    currentLed %= 28;
 
     gameRunLR = currentTime;
+  }
+
+  if (!lastInteractState && interactState) {
+    if (currentLed == targetLed || currentLed == targetLedS) {
+      score++;
+      clockwise = !clockwise;
+      generateTargets(currentLed);
+      Serial.println("hit");
+    } else {
+      Serial.println("missed ");
+      state++;
+      return;
+    }
   }
 }
 
