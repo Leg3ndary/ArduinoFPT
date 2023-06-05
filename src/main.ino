@@ -14,7 +14,6 @@ const int startButton = 14;
 const int interactButton = 15;
 const int speakerPin = 19;
 
-const int bits[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
 const int difficultyLeds[7][4] = {
   {
@@ -64,7 +63,7 @@ int gameRunLR = 0;
 Setting up all the pins to the correct mode.
 */
 void setup() {
-  Serial.begin(9600); // dele this after debugging
+  Serial.begin(9600); // delete this after debugging
   for (int i = 0; i < 4; i++) {
     pinMode(dataPins[i], OUTPUT);
     pinMode(latchPins[i], OUTPUT);
@@ -75,6 +74,33 @@ void setup() {
   pinMode(speakerPin, OUTPUT);
 
   renderDifficulty();
+}
+
+int* convert(int leds[]) {
+  int result[] = {0, 0, 0, 0};
+  
+  int binary[4][7] = {
+      {0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0},
+  };
+
+  for (int i = 0; i < sizeof(leds) / sizeof(leds[0]); i++) {
+      int bitShifter = i / 7;
+      int bit = i % 7;
+      binary[bitShifter][bit] = leds[i];
+  }
+
+  for (int i = 0; i < 4; i++) {
+      int decimal = 0;
+      for(int j = 0 ; j < 8 ; j++) {
+          decimal = (decimal << 1) + binary[i][j];
+      }
+      result[i] = decimal;
+  }
+  
+  return result;
 }
 
 void shiftOut(byte dataOut, int bitShifter) {
@@ -135,12 +161,19 @@ void gameRun() {
   }
 
   if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
-    clearLeds();
-    // Set latchPin low to allow data flow
-    digitalWrite(latchPins[bitShifter], LOW); 
-    shiftOut(bits[bit], bitShifter);
-    // Set latchPin to high to lock and send data
-    digitalWrite(latchPins[bitShifter], HIGH);
+    
+    int toConvert[] = {targetLed, currentLed};
+    int* converted = convert(toConvert);
+
+    for (int i = 0; i < 4; i++) {
+      // Set latchPin low to allow data flow
+      digitalWrite(latchPins[bitShifter], LOW);
+      
+      shiftOut(converted[i], bitShifter);
+      // Set latchPin to high to lock and send data
+      digitalWrite(latchPins[bitShifter], HIGH);
+    }
+    
 
     if (clockwise) {
       currentLed++;
