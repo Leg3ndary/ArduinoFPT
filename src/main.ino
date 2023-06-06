@@ -15,6 +15,7 @@ const int interactButton = 15;
 const int seedPin = 18;
 const int speakerPin = 19;
 
+const int scoreAnimationSpeed = 3000;
 const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
 const int difficultyLeds[7][4] = {
   {
@@ -63,6 +64,9 @@ int gameRunLR = 0;
 int convertResult[4] = {0, 0, 0, 0};
 int scoreResult[4] = {0, 0, 0, 0};
 
+int scoreAnimationCount = 0;
+int scoreAnimationDivisor = 0;
+
 void resetGame() {
   score = 0;
   clockwise = true;
@@ -71,6 +75,9 @@ void resetGame() {
 
   targetLed = random(8, 27);
   targetLedS = targetLed + 1;
+
+  scoreAnimationCount = 0;
+  scoreAnimationDivisor = 0;
 }
 
 /*
