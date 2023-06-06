@@ -43,7 +43,7 @@ const int difficultyLeds[7][4] = {
 /*
 The following are all things that might change throughout the program
 */
-int score = 0;
+long score = 0;
 int state = 0;
 int difficulty = 0;
 bool clockwise = true;
@@ -60,7 +60,18 @@ int interactState = 0;
 int lastInteractState = 0;
 
 int gameRunLR = 0;
-int result[4] = {0, 0, 0, 0};
+int convertResult[4] = {0, 0, 0, 0};
+int scoreResult[4] = {0, 0, 0, 0};
+
+void resetGame() {
+  score = 0;
+  clockwise = true;
+
+  currentLed = 0;
+
+  targetLed = random(8, 27);
+  targetLedS = targetLed + 1;
+}
 
 /*
 Setting up all the pins to the correct mode.
@@ -101,7 +112,7 @@ int* convert(int* leds) {
     {0, 0, 0, 0, 0, 0, 0},
   };
 
-  for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]); i++) {
+  for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]) + 1; i++) {
     int bitShifter = leds[i] / 7;
     int bit = leds[i] % 7;
     binary[bitShifter][bit] = 1;
@@ -114,10 +125,49 @@ int* convert(int* leds) {
         decimal -= customPower(6 - j);
       }
     }
-    result[i] = decimal;
+    convertResult[i] = decimal;
   }
   
-  return result;
+  return convertResult;
+}
+
+int* scoreConvert(long scoreTemp) {
+  int binary[4][7] = {
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+  };
+
+  // max 128 per thing
+  int arr[24];
+  int counter = 0;
+
+  while (scoreTemp != 0) {
+		arr[counter] = scoreTemp % 2;
+		counter++;
+		scoreTemp /= 2;
+	}
+
+  for (int i = counter - 1; i >= 0; i--) {
+    if (arr[i] == 1) {
+      int bitShifter = i / 7;
+      int bit = i % 7;
+      binary[bitShifter][bit] = 1;
+    }
+  }
+
+  for (int i = 0; i < 4; i++) {
+    int decimal = 255;
+    for (int j = 0 ; j < 7 ; j++) {
+      if (binary[i][j] == 0) {
+        decimal -= customPower(6 - j);
+      }
+    }
+    scoreResult[i] = decimal;
+  }
+  
+  return scoreResult;
 }
 
 void shiftOut(byte dataOut, int bitShifter) {
@@ -166,18 +216,7 @@ void renderDifficulty() {
 void gameRun() {
   if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
     int toConvert[] = {currentLed, targetLed, targetLedS};
-    Serial.print(currentLed);
-    Serial.print(targetLed);
-    Serial.println(targetLedS);
-    
     int* converted = convert(toConvert);
-    Serial.print(converted[0]);
-    Serial.print(" ");
-    Serial.print(converted[1]);
-    Serial.print(" ");
-    Serial.print(converted[2]);
-    Serial.print(" ");
-    Serial.println(converted[3]);
 
     for (int i = 0; i < 4; i++) {
       // Set latchPin low to allow data flow
@@ -203,9 +242,7 @@ void gameRun() {
       score++;
       clockwise = !clockwise;
       generateTargets(currentLed);
-      Serial.println("hit");
     } else {
-      Serial.println("missed ");
       state++;
       return;
     }
@@ -213,7 +250,16 @@ void gameRun() {
 }
 
 void gameOver() {
+  int* converted = scoreConvert(score);
 
+  for (int i = 0; i < 4; i++) {
+    // Set latchPin low to allow data flow
+    digitalWrite(latchPins[i], LOW);
+
+    shiftOut(converted[i], i);
+    // Set latchPin to high to lock and send data
+    digitalWrite(latchPins[i], HIGH);
+  }
 }
 
 void loop() {
@@ -237,6 +283,11 @@ void loop() {
     gameRun();
   } else if (state == 2) {
     gameOver();
+    if (!lastInteractState && interactState) {
+      state++;
+      renderDifficulty();
+      resetGame();
+    }
   } else {
     state = 0;
   }
