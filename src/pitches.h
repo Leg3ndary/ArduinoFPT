@@ -1,9 +1,8 @@
-/*
-speaker1 is meant for the main melody and rythm
-speaker2 is meant for the beat and to create harmony
+/*************************************************
 
-The defines are all macros meant ot make the code look neater, these are all preprocessed before compile time.
-*/
+ * Public Constants
+
+ *************************************************/
 
 #define REST 0
 #define B0  31
@@ -95,37 +94,3 @@ The defines are all macros meant ot make the code look neater, these are all pre
 #define CS8 4435
 #define D8  4699
 #define DS8 4978
-
-const int speaker = 19;
-
-/*
-Music related stuff
-*/
-// Tempo is how fast it's going, it should run at around 140 BPM but to make doing eigth notes easier we set a tempo of 70
-const int tempo = 140;
-int tetrisMelody[] = {E4,E3,B3,C4,D4,C4,B3,A3,A3,C4,E4,D4,C4};
-int tetrisMBeats[] = {2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1};
-
-void playTone(int speaker, int tone, int duration) {
-  for (long i = 0; i < duration * 1000L; i += tone * 2) {
-    digitalWrite(speaker, HIGH);
-    delayMicroseconds(tone);
-    digitalWrite(speaker, LOW);
-    delayMicroseconds(tone);
-  }
-}
-
-void setup() {
-  pinMode(speaker, OUTPUT);
-}
-
-void loop() {
-  for (int i = 0; i < sizeof(tetrisMelody) / sizeof(tetrisMelody[0]); i++) {
-    if (tetrisMelody[i] == 0) {
-      delay(tempo);
-    } else {
-      playTone(speaker, tetrisMelody[i], tempo);
-    }
-    delay(tempo / 4);
-  }
-}
