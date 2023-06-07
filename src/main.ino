@@ -85,6 +85,8 @@ const int melody[] = {
 };
 int notes = sizeof(melody) / sizeof(melody[0]) / 2; 
 int divider = 0, noteDuration = 0;
+int wholenote = (60000 * 4) / musicTempo;
+int currentNote = 0;
 
 // Misc Vars
 long score = 0;
@@ -105,6 +107,7 @@ int interactState = 0;
 int lastInteractState = 0;
 
 int gameRunLR = 0;
+int musicPlayLR = 0;
 int convertResult[4] = {0, 0, 0, 0};
 int scoreResult[4] = {0, 0, 0, 0};
 
@@ -139,6 +142,33 @@ void setup() {
 
   renderDifficulty();
   randomSeed(analogRead(seedPin));
+}
+
+void playTetris() {
+  if (currentTime - musicPlayLR >= noteDuration) {
+    // stop any tones
+    noTone(speakerPin);
+    // calculates the duration of each note
+    divider = melody[currentNote + 1];
+    if (divider > 0) {
+      // regular note, just proceed
+      noteDuration = (wholenote) / divider;
+    } else if (divider < 0) {
+      // dotted notes are represented with negative durations!!
+      noteDuration = (wholenote) / abs(divider);
+      noteDuration *= 1.5; // increases the duration in half for dotted notes
+    }
+
+    // we only play the note for 90% of the duration, leaving 10% as a pause
+    tone(speakerPin, melody[currentNote], noteDuration * 0.9);
+
+    musicPlayLR = currentTime;
+    currentNote += 2;
+
+    if (currentNote / 2 >= notes) {
+      currentNote = 0;
+    }
+  }
 }
 
 // Just generates new values for targets a minimum of 5 leds away.
@@ -338,6 +368,8 @@ void loop() {
   currentTime = millis();
   startState = digitalRead(startButton);
   interactState = digitalRead(interactButton);
+
+  playTetris();
 
   if (state == 0) {
     if (!lastInteractState && interactState) {
