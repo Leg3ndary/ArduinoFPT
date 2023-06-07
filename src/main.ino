@@ -224,10 +224,12 @@ void gameRun() {
     if (clockwise) {
       if (currentLed == (targetLedS + 1) % 28) {
         state++;
+        score *= difficulty;
       }
     } else {
       if (currentLed == (targetLedS - 1) % 28) {
         state++;
+        score *= difficulty;
       }
     }
 
@@ -260,6 +262,7 @@ void gameRun() {
       generateTargets(currentLed);
     } else {
       state++;
+      score *= difficulty;
       return;
     }
   }
