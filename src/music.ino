@@ -1,131 +1,50 @@
-/*
-speaker1 is meant for the main melody and rythm
-speaker2 is meant for the beat and to create harmony
 
-The defines are all macros meant ot make the code look neater, these are all preprocessed before compile time.
-*/
 
-#define REST 0
-#define B0  31
-#define C1  33
-#define CS1 35
-#define D1  37
-#define DS1 39
-#define E1  41
-#define F1  44
-#define FS1 46
-#define G1  49
-#define GS1 52
-#define A1  55
-#define AS1 58
-#define B1  62
-#define C2  65
-#define CS2 69
-#define D2  73
-#define DS2 78
-#define E2  82
-#define F2  87
-#define FS2 93
-#define G2  98
-#define GS2 104
-#define A2  110
-#define AS2 117
-#define B2  123
-#define C3  131
-#define CS3 139
-#define D3  147
-#define DS3 156
-#define E3  165
-#define F3  175
-#define FS3 185
-#define G3  196
-#define GS3 208
-#define A3  220
-#define AS3 233
-#define B3  247
-#define C4  262
-#define CS4 277
-#define D4  294
-#define DS4 311
-#define E4  330
-#define F4  349
-#define FS4 370
-#define G4  392
-#define GS4 415
-#define A4  440
-#define AS4 466
-#define B4  494
-#define C5  523
-#define CS5 554
-#define D5  587
-#define DS5 622
-#define E5  659
-#define F5  698
-#define FS5 740
-#define G5  784
-#define GS5 831
-#define A5  880
-#define AS5 932
-#define B5  988
-#define C6  1047
-#define CS6 1109
-#define D6  1175
-#define DS6 1245
-#define E6  1319
-#define F6  1397
-#define FS6 1480
-#define G6  1568
-#define GS6 1661
-#define A6  1760
-#define AS6 1865
-#define B6  1976
-#define C7  2093
-#define CS7 2217
-#define D7  2349
-#define DS7 2489
-#define E7  2637
-#define F7  2794
-#define FS7 2960
-#define G7  3136
-#define GS7 3322
-#define A7  3520
-#define AS7 3729
-#define B7  3951
-#define C8  4186
-#define CS8 4435
-#define D8  4699
-#define DS8 4978
+// change this to whichever pin you want to use
+int speakerPin = 19;
 
-const int speaker = 19;
+// notes of the moledy followed by the duration.
+// a 4 means a quarter note, 8 an eighteenth , 16 sixteenth, so on
+// !!negative numbers are used to represent dotted notes,
+// so -4 means a dotted quarter note, that is, a quarter plus an eighteenth!!
 
-/*
-Music related stuff
-*/
-// Tempo is how fast it's going, it should run at around 140 BPM but to make doing eigth notes easier we set a tempo of 70
-const int tempo = 140;
-int tetrisMelody[] = {E4,E3,B3,C4,D4,C4,B3,A3,A3,C4,E4,D4,C4};
-int tetrisMBeats[] = {2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1};
 
-void playTone(int speaker, int tone, int duration) {
-  for (long i = 0; i < duration * 1000L; i += tone * 2) {
-    digitalWrite(speaker, HIGH);
-    delayMicroseconds(tone);
-    digitalWrite(speaker, LOW);
-    delayMicroseconds(tone);
-  }
-}
+// sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
+// there are two values per note (pitch and duration), so for each note there are four bytes
+int notes = sizeof(melody) / sizeof(melody[0]) / 2; 
+
+// this calculates the duration of a whole note in ms (60s/tempo)*4 beats
+int wholenote = (60000 * 4) / tempo;
+
+int divider = 0, noteDuration = 0;
 
 void setup() {
-  pinMode(speaker, OUTPUT);
+  // iterate over the notes of the melody. 
+  // Remember, the array is twice the number of notes (notes + durations)
+  for (int thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) {
+
+    // calculates the duration of each note
+    divider = melody[thisNote + 1];
+    if (divider > 0) {
+      // regular note, just proceed
+      noteDuration = (wholenote) / divider;
+    } else if (divider < 0) {
+      // dotted notes are represented with negative durations!!
+      noteDuration = (wholenote) / abs(divider);
+      noteDuration *= 1.5; // increases the duration in half for dotted notes
+    }
+
+    // we only play the note for 90% of the duration, leaving 10% as a pause
+    tone(speakerPin, melody[thisNote], noteDuration*0.9);
+
+    // Wait for the specief duration before playing the next note.
+    delay(noteDuration);
+    
+    // stop the waveform generation before the next note.
+    noTone(speakerPin);
+  }
 }
 
 void loop() {
-  for (int i = 0; i < sizeof(tetrisMelody) / sizeof(tetrisMelody[0]); i++) {
-    if (tetrisMelody[i] == 0) {
-      delay(tempo);
-    } else {
-      playTone(speaker, tetrisMelody[i], tempo);
-    }
-    delay(tempo / 4);
-  }
+  // no need to repeat the melody.
 }

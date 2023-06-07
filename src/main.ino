@@ -2,6 +2,18 @@
 Pop the lock gamebox code, Copyright Leg3ndary 2023.
 */
 
+#define GS4 415
+#define A4  440
+#define B4  494
+#define C5  523
+#define D5  587
+#define E5  659
+#define F5  698
+#define G5  784
+#define GS5 831
+#define A5  880
+#define REST 0
+
 // Constants
 const int dataPins[4] = {13, 10, 7, 4};
 const int latchPins[4] = {12, 9, 6, 3};
@@ -10,6 +22,8 @@ const int startButton = 14;
 const int interactButton = 15;
 const int seedPin = 18;
 const int speakerPin = 19;
+
+const int musicTempo = 144;
 
 const int scoreAnimationSpeed = 3000;
 const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
@@ -37,6 +51,41 @@ const int difficultyLeds[7][4] = {
   }
 };
 
+const int melody[] = {
+  E5, 4,  B4,8,  C5,8,  D5,4,  C5,8,  B4,8,
+  A4, 4,  A4,8,  C5,8,  E5,4,  D5,8,  C5,8,
+  B4, -4,  C5,8,  D5,4,  E5,4,
+  C5, 4,  A4,4,  A4,8,  A4,4,  B4,8,  C5,8,
+
+  D5, -4,  F5,8,  A5,4,  G5,8,  F5,8,
+  E5, -4,  C5,8,  E5,4,  D5,8,  C5,8,
+  B4, 4,  B4,8,  C5,8,  D5,4,  E5,4,
+  C5, 4,  A4,4,  A4,4, REST, 4,
+
+  E5, 4,  B4,8,  C5,8,  D5,4,  C5,8,  B4,8,
+  A4, 4,  A4,8,  C5,8,  E5,4,  D5,8,  C5,8,
+  B4, -4,  C5,8,  D5,4,  E5,4,
+  C5, 4,  A4,4,  A4,8,  A4,4,  B4,8,  C5,8,
+
+  D5, -4,  F5,8,  A5,4,  G5,8,  F5,8,
+  E5, -4,  C5,8,  E5,4,  D5,8,  C5,8,
+  B4, 4,  B4,8,  C5,8,  D5,4,  E5,4,
+  C5, 4,  A4,4,  A4,4, REST, 4,
+  
+
+  E5,2,  C5,2,
+  D5,2,   B4,2,
+  C5,2,   A4,2,
+  GS4,2,  B4,4,  REST,8, 
+  E5,2,   C5,2,
+  D5,2,   B4,2,
+  C5,4,   E5,4,  A5,2,
+  GS5,2,
+
+};
+int notes = sizeof(melody) / sizeof(melody[0]) / 2; 
+int divider = 0, noteDuration = 0;
+
 // Misc Vars
 long score = 0;
 long scoreAddition = 1;
@@ -46,7 +95,6 @@ bool clockwise = true;
 
 int currentLed = 0;
 long currentTime = 0;
-long currentMicro = 0;
 
 int targetLed = random(8, 27);
 int targetLedS = targetLed + 1;
@@ -288,7 +336,6 @@ void gameOver() {
 // Main synchronous loop
 void loop() {
   currentTime = millis();
-  currentMicro = micros();
   startState = digitalRead(startButton);
   interactState = digitalRead(interactButton);
 
