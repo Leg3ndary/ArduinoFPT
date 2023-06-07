@@ -222,6 +222,16 @@ void renderDifficulty() {
 
 void gameRun() {
   if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
+    if (clockwise) {
+      if (currentLed == (targetLedS + 1) % 28) {
+        state++;
+      }
+    } else {
+      if (currentLed == (targetLedS - 1) % 28) {
+        state++;
+      }
+    }
+
     int toConvert[] = {currentLed, targetLed, targetLedS};
     int* converted = convert(toConvert);
 
