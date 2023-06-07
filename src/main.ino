@@ -1,12 +1,8 @@
 /*
-This is code for a friend and I's arduino fpt, without the diagram it's kinda useless, so just don't copy ig!
-
-Total Memory Available: 2048 bytes
+Pop the lock gamebox code, Copyright Leg3ndary 2023.
 */
 
-/*
-The following are all constants, first group is pins, seconds is just other data that won't be changed.
-*/
+// Constants
 const int dataPins[4] = {13, 10, 7, 4};
 const int latchPins[4] = {12, 9, 6, 3};
 const int clockPins[4] = {11, 8, 5, 2};
@@ -41,9 +37,7 @@ const int difficultyLeds[7][4] = {
   }
 };
 
-/*
-The following are all things that might change throughout the program
-*/
+// Misc Vars
 long score = 0;
 int state = 0;
 int difficulty = 0;
@@ -67,6 +61,7 @@ int scoreResult[4] = {0, 0, 0, 0};
 int scoreAnimationCount = 0;
 int scoreAnimationDivisor = 0;
 
+// Resets state variables for a fresh game
 void resetGame() {
   score = 0;
   clockwise = true;
@@ -80,9 +75,7 @@ void resetGame() {
   scoreAnimationDivisor = 0;
 }
 
-/*
-Setting up all the pins to the correct mode.
-*/
+// Setup for starting LED screen and pin output.
 void setup() {
   Serial.begin(9600); // delete this after debugging
   for (int i = 0; i < 4; i++) {
@@ -98,11 +91,13 @@ void setup() {
   randomSeed(analogRead(seedPin));
 }
 
+// Just generates new values for targets a minimum of 5 leds away.
 void generateTargets(int current) {
   targetLed = random(current + 5, current + 24) % 28;
   targetLedS = (targetLed + 1) % 28;
 }
 
+// Custom power function that starts from power 1 instead of 0.
 int customPower(int exponent) {
   int result = 2;
   for (int i = 0; i < exponent; i++) {
@@ -111,6 +106,7 @@ int customPower(int exponent) {
   return result;
 }
 
+// Returning pointer to array of 4 results used to convert LED positions.
 int* convert(int* leds) {
   int binary[4][7] = {
     {0, 0, 0, 0, 0, 0, 0},
@@ -138,6 +134,7 @@ int* convert(int* leds) {
   return convertResult;
 }
 
+// Essentially daisy chaining a 28 bit output
 int* scoreConvert(long scoreTemp) {
   int binary[4][7] = {
     {0, 0, 0, 0, 0, 0, 0},
@@ -177,6 +174,7 @@ int* scoreConvert(long scoreTemp) {
   return scoreResult;
 }
 
+// Shift out the data to the set bitShifter
 void shiftOut(byte dataOut, int bitShifter) {
   // Shift out 8 bits LSB first, on rising edge of clock
   boolean pinState;
@@ -220,6 +218,7 @@ void renderDifficulty() {
   }
 }
 
+// Game run iteration func
 void gameRun() {
   if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
     if (clockwise) {
@@ -266,6 +265,7 @@ void gameRun() {
   }
 }
 
+// Gameover score display iterator
 void gameOver() {
   int* converted = scoreConvert(score);
 
@@ -279,6 +279,7 @@ void gameOver() {
   }
 }
 
+// Main synchronous loop
 void loop() {
   currentTime = millis();
   startState = digitalRead(startButton);
