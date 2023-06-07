@@ -45,7 +45,8 @@ int difficulty = 0;
 bool clockwise = true;
 
 int currentLed = 0;
-int currentTime = 0;
+long currentTime = 0;
+long currentMicro = 0;
 
 int targetLed = random(8, 27);
 int targetLedS = targetLed + 1;
@@ -287,6 +288,7 @@ void gameOver() {
 // Main synchronous loop
 void loop() {
   currentTime = millis();
+  currentMicro = micros();
   startState = digitalRead(startButton);
   interactState = digitalRead(interactButton);
 

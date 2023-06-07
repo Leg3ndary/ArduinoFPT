@@ -1,5 +1,6 @@
 {
-    "sketch": "src\\src.ino",
+    "sketch": "src\\music.ino",
     "board": "arduino:avr:uno",
-    "programmer": "avrisp"
+    "programmer": "avrisp",
+    "port": "COM3"
 }
