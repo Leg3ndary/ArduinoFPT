@@ -39,6 +39,7 @@ const int difficultyLeds[7][4] = {
 
 // Misc Vars
 long score = 0;
+long scoreAddition = 1;
 int state = 0;
 int difficulty = 0;
 bool clockwise = true;
@@ -220,7 +221,7 @@ void renderDifficulty() {
 
 // Game run iteration func
 void gameRun() {
-  if (currentTime - gameRunLR >= speeds[difficulty] + score * 3) {
+  if (currentTime - gameRunLR >= speeds[difficulty] - score) {
     if (clockwise) {
       if (currentLed == (targetLedS + 1) % 28) {
         state++;
@@ -258,6 +259,7 @@ void gameRun() {
   if (!lastInteractState && interactState) {
     if (currentLed == targetLed || currentLed == targetLedS) {
       score++;
+      scoreAddition++;
       clockwise = !clockwise;
       generateTargets(currentLed);
     } else {
