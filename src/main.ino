@@ -83,16 +83,14 @@ const int tetrisMelody[] = {
   C5,4,   E5,4,  A5,2,
   GS5,2,
 };
-const int tetrisTempo = 200;
+const int tetrisTempo = 144;
 
 const int neverGonneGiveYouUpMelody[] = {
   D5,-4, E5,-4, A4,4, //1
   E5,-4, FS5,-4, A5,16, G5,16, FS5,8,
   D5,-4, E5,-4, A4,2,
   A4,16, A4,16, B4,16, D5,8, D5,16,
-  D5,-4, E5,-4, A4,4, //repeat from 1
-  E5,-4, FS5,-4, A5,16, G5,16, FS5,8,
-  D5,-4, E5,-4, A4,2,
+
   A4,16, A4,16, B4,16, D5,8, D5,16,
   REST,4, B4,8, CS5,8, D5,8, D5,8, E5,8, CS5,-8,
   B4,16, A4,2, REST,4, 
@@ -153,7 +151,7 @@ const int neverGonneGiveYouUpMelody[] = {
 
   E5,4, D5,2, REST,4
 };
-const int neverGonnaGiveYouUpTempo = 150;
+const int neverGonnaGiveYouUpTempo = 114;
 
 const int* melodies[] = {
   tetrisMelody, neverGonneGiveYouUpMelody
