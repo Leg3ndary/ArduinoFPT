@@ -157,7 +157,7 @@ const int tempos[] = {
 
 // Misc Vars
 int currentMelodyTempo = 0;
-int musicNotes[] = {99, 679}; 
+int musicNotes[] = {99, 311}; 
 int musicDivider = 0, noteDuration = 0;
 int wholenote = (60000 * 4) / tempos[currentMelodyTempo];
 int currentNote = 0;
