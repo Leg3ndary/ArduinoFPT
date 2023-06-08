@@ -440,6 +440,13 @@ void resetGame() {
   scoreAnimationDivisor = 0;
 }
 
+// reset music state
+void resetMusic() {
+  musicNotes = sizeof(melodies[currentMelodyTempo]) / sizeof(melodies[currentMelodyTempo][0]) / 2;
+  wholenote = (60000 * 4) / tempos[currentMelodyTempo];
+  currentNote = 0;
+}
+
 // Setup for starting LED screen and pin output.
 void setup() {
   Serial.begin(9600); // delete this after debugging
@@ -456,7 +463,7 @@ void setup() {
   randomSeed(analogRead(seedPin));
 }
 
-void playTetris() {
+void playMusic() {
   if (currentTime - musicPlayLR >= noteDuration) {
     // stop any tones
     noTone(speakerPin);
@@ -681,7 +688,7 @@ void loop() {
   startState = digitalRead(startPin);
   interactState = digitalRead(interactPin);
 
-  playTetris();
+  playMusic();
 
   if (state == 0) {
     if (!lastInteractState && interactState) {
@@ -701,6 +708,11 @@ void loop() {
       state++;
       renderDifficulty();
       resetGame();
+    }
+    if (!lastInteractState && interactState) {
+      currentMelodyTempo++;
+      currentMelodyTempo %= 6;
+      resetMusic();
     }
   } else {
     state = 0;
