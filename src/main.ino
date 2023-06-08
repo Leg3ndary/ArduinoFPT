@@ -23,8 +23,6 @@ const int interactButton = 15;
 const int seedPin = 18;
 const int speakerPin = 19;
 
-const int musicTempo = 144;
-
 const int scoreAnimationSpeed = 3000;
 const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
 const int difficultyLeds[7][4] = {
@@ -51,6 +49,7 @@ const int difficultyLeds[7][4] = {
   }
 };
 
+// Melodies: 
 const int melody[] = {
   E5, 4,  B4,8,  C5,8,  D5,4,  C5,8,  B4,8,
   A4, 4,  A4,8,  C5,8,  E5,4,  D5,8,  C5,8,
@@ -83,6 +82,9 @@ const int melody[] = {
   GS5,2,
 
 };
+const int musicTempo = 200;
+
+
 int notes = sizeof(melody) / sizeof(melody[0]) / 2; 
 int divider = 0, noteDuration = 0;
 int wholenote = (60000 * 4) / musicTempo;
