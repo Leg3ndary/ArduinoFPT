@@ -70,7 +70,6 @@ const int melody[] = {
   E5, -4,  C5,8,  E5,4,  D5,8,  C5,8,
   B4, 4,  B4,8,  C5,8,  D5,4,  E5,4,
   C5, 4,  A4,4,  A4,4, REST, 4,
-  
 
   E5,2,  C5,2,
   D5,2,   B4,2,
@@ -80,7 +79,6 @@ const int melody[] = {
   D5,2,   B4,2,
   C5,4,   E5,4,  A5,2,
   GS5,2,
-
 };
 const int musicTempo = 200;
 
@@ -376,12 +374,10 @@ void loop() {
   if (state == 0) {
     if (!lastInteractState && interactState) {
       difficulty++;
-      if (difficulty > 6) {
-        difficulty = 0;
-      }
+      difficulty %= 6;
       renderDifficulty();
     }
-    if(!lastStartState && startState) {
+    if (!lastStartState && startState) {
       state++;
     }
   } else if (state == 1)
@@ -389,7 +385,7 @@ void loop() {
     gameRun();
   } else if (state == 2) {
     gameOver();
-    if (!lastInteractState && interactState) {
+    if (!lastStartState && startState) {
       state++;
       renderDifficulty();
       resetGame();
