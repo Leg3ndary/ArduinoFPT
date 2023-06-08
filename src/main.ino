@@ -145,11 +145,6 @@ const int neverGonneGiveYouUpMelody[] = {
   D5,4, E5,8, CS5,-8, B4,16, A4,4, A4,8,  
   E5,4, D5,2, A4,16, B4,16, D5,16, B4,16,
   FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16, //45
-  
-  A5,4, CS5,8, D5,-8, CS5,16, B4,8, A4,16, B4,16, D5,16, B4,16,
-  D5,4, E5,8, CS5,-8, B4,16, A4,4, A4,8, 
-
-  E5,4, D5,2, REST,4
 };
 const int neverGonnaGiveYouUpTempo = 114;
 
