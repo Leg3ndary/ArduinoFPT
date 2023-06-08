@@ -164,7 +164,7 @@ const int tempos[] = {
 
 // Misc Vars
 int currentMelodyTempo = 0;
-int musicNotes = sizeof(melodies[currentMelodyTempo]) / sizeof(melodies[currentMelodyTempo][0]) / 2; 
+int musicNotes[] = {99, 679}; 
 int musicDivider = 0, noteDuration = 0;
 int wholenote = (60000 * 4) / tempos[currentMelodyTempo];
 int currentNote = 0;
@@ -210,7 +210,6 @@ void resetGame() {
 
 // reset music state
 void resetMusic() {
-  musicNotes = sizeof(melodies[currentMelodyTempo]) / sizeof(melodies[currentMelodyTempo][0]) / 2;
   wholenote = (60000 * 4) / tempos[currentMelodyTempo];
   currentNote = 0;
 }
@@ -252,7 +251,7 @@ void playMusic() {
     musicPlayLR = currentTime;
     currentNote += 2;
 
-    if (currentNote / 2 >= musicNotes) {
+    if (currentNote / 2 >= musicNotes[currentMelodyTempo]) {
       currentNote = 0;
     }
   }
