@@ -131,7 +131,7 @@ const int pinkPantherMelody[] = {
 };
 const int pinkPantherTempo = 160;
 
-int neverGonneGiveYouUpMelody[] = {
+const int neverGonneGiveYouUpMelody[] = {
   D5,-4, E5,-4, A4,4, //1
   E5,-4, FS5,-4, A5,16, G5,16, FS5,8,
   D5,-4, E5,-4, A4,2,
