@@ -406,10 +406,15 @@ void gameRun() {
 
     if (clockwise) {
       currentLed++;
+      currentLed %= 28;
     } else {
-      currentLed--;
+      if (currentLed == 0) {
+          currentLed = 27;
+      } else {
+          currentLed--;
+      }
     }
-    currentLed %= 28;
+    
 
     gameRunLR = currentTime;
   }
