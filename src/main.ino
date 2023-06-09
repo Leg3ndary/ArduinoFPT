@@ -158,7 +158,8 @@ const int tempos[] = {
 // Misc Vars
 int currentMelodyTempo = 0;
 int musicNotes[] = {99, 311}; 
-int musicDivider = 0, noteDuration = 0;
+int musicDivider = 0;
+int noteDuration = 0;
 int wholenote = (60000 * 4) / tempos[currentMelodyTempo];
 int currentNote = 0;
 
@@ -205,6 +206,7 @@ void resetGame() {
 void resetMusic() {
   wholenote = (60000 * 4) / tempos[currentMelodyTempo];
   currentNote = 0;
+  noTone(speakerPin);
 }
 
 // Setup for starting LED screen and pin output.
@@ -244,7 +246,7 @@ void playMusic() {
     musicPlayLR = currentTime;
     currentNote += 2;
 
-    if (currentNote / 2 >= musicNotes[currentMelodyTempo]) {
+    if (currentNote / 2 > musicNotes[currentMelodyTempo]) {
       resetMusic();
     }
   }
@@ -384,11 +386,13 @@ void gameRun() {
       if (currentLed == (targetLedS + 1) % 28) {
         state++;
         score *= difficulty;
+        gameOver();
       }
     } else {
       if (currentLed == (targetLedS - 1) % 28) {
         state++;
         score *= difficulty;
+        gameOver();
       }
     }
 
@@ -463,7 +467,6 @@ void loop() {
   {
     gameRun();
   } else if (state == 2) {
-    gameOver();
     if (!lastStartState && startState) {
       state++;
       renderDifficulty();
