@@ -393,13 +393,14 @@ const int* melodies[] = {
 const int tempos[] = {
   tetrisTempo, pinkPantherTempo, neverGonnaGiveYouUpTempo, starWarsTempo, miiChannelTempo, canonInDTempo, minuetInDTempo
 };
+const int musicNotes[] = {99, 311, 311, 311, 311, 311, 311}; 
 
 // Misc Vars
 int currentMelodyTempo = 0;
-int musicNotes[] = {99, 311, 311, 311, 311, 311, 311}; 
 int musicDivider = 0, noteDuration = 0;
 int wholenote = (60000 * 4) / tempos[currentMelodyTempo];
 int currentNote = 0;
+int currentPitch = 0;
 
 long score = 0;
 long scoreAddition = 1;
@@ -467,7 +468,7 @@ void playMusic() {
     // stop any tones
     noTone(speakerPin);
     // calculates the duration of each note
-    musicDivider = melodies[currentMelodyTempo][currentNote + 1];
+    musicDivider = pgm_read_word(melodies[currentMelodyTempo][currentNote + 1]);
     if (musicDivider > 0) {
       // regular note, just proceed
       noteDuration = (wholenote) / musicDivider;
@@ -477,8 +478,10 @@ void playMusic() {
       noteDuration *= 1.5; // increases the duration in half for dotted notes
     }
 
+    currentPitch = pgm_read_word(melodies[currentMelodyTempo][currentNote]);
+
     // we only play the note for 90% of the duration, leaving 10% as a pause
-    tone(speakerPin, melodies[currentMelodyTempo][currentNote], noteDuration * 0.9);
+    tone(speakerPin, currentPitch, noteDuration * 0.9);
 
     musicPlayLR = currentTime;
     currentNote += 2;
