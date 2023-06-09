@@ -246,13 +246,8 @@ void playMusic() {
     musicPlayLR = currentTime;
     currentNote += 2;
 
-<<<<<<< HEAD
     if (currentNote / 2 > musicNotes[currentMelodyTempo]) {
       resetMusic();
-=======
-    if (currentNote / 2 >= musicNotes[currentMelodyTempo]) {
-      currentNote = 0;
->>>>>>> parent of 054e4c0 (Push all scores)
     }
   }
 }
