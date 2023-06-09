@@ -245,7 +245,7 @@ void playMusic() {
     currentNote += 2;
 
     if (currentNote / 2 >= musicNotes[currentMelodyTempo]) {
-      currentNote = 0;
+      resetMusic();
     }
   }
 }
@@ -471,7 +471,7 @@ void loop() {
     }
     if (!lastInteractState && interactState) {
       currentMelodyTempo++;
-      currentMelodyTempo %= 6;
+      currentMelodyTempo %= 2;
       resetMusic();
     }
   } else {
