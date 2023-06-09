@@ -427,6 +427,7 @@ void gameRun() {
     } else {
       state++;
       score *= difficulty;
+      gameOver();
       return;
     }
   }
