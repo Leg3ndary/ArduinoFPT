@@ -477,8 +477,6 @@ void loop() {
       resetGame();
     }
     if (!lastInteractState && interactState) {
-      currentMelodyTempo++;
-      currentMelodyTempo %= 2;
       resetMusic();
     }
   } else {
