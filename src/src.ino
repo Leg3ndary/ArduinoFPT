@@ -2,6 +2,7 @@
 Pop the lock gamebox code, Copyright Leg3ndary 2023.
 */
 
+// Macros
 #define D3  147
 #define E3  165
 #define FS3 185
@@ -48,8 +49,6 @@ const int interactPin = 15;
 const int seedPin = 18;
 const int speakerPin = 19;
 
-const int scoreAnimationSpeed = 3000;
-
 const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
 const int difficultyLeds[7][4] = {
   {
@@ -75,7 +74,7 @@ const int difficultyLeds[7][4] = {
   }
 };
 
-// Melodies
+// Melodies are all from https://github.com/robsoncouto/arduino-songs/blob/master/harrypotter/harrypotter.ino
 const PROGMEM int tetrisMelody[] = {
   E5, 4,  B4,8,  C5,8,  D5,4,  C5,8,  B4,8,
   A4, 4,  A4,8,  C5,8,  E5,4,  D5,8,  C5,8,
@@ -108,91 +107,101 @@ const PROGMEM int tetrisMelody[] = {
 };
 const int tetrisTempo = 144;
 
-const PROGMEM int pinkPantherMelody[] = {
-  REST,2, REST,4, REST,8, DS4,8, 
-  E4,-4, REST,8, FS4,8, G4,-4, REST,8, DS4,8,
-  E4,-8, FS4,8,  G4,-8, C5,8, B4,-8, E4,8, G4,-8, B4,8,   
-  AS4,2, A4,-16, G4,-16, E4,-16, D4,-16, 
-  E4,2, REST,4, REST,8, DS4,4,
+const PROGMEM int zeldaMelody[] = {
+  AS4,-2,  F4,8,  F4,8,  AS4,8,
+  GS4,16,  FS4,16,  GS4,-2,
+  AS4,-2,  FS4,8,  FS4,8,  AS4,8,
+  A4,16,  G4,16,  A4,-2,
+  REST,1, 
 
-  E4,-4, REST,8, FS4,8, G4,-4, REST,8, DS4,8,
-  E4,-8, FS4,8,  G4,-8, C5,8, B4,-8, G4,8, B4,-8, E5,8,
-  DS5,1,   
-  D5,2, REST,4, REST,8, DS4,8, 
-  E4,-4, REST,8, FS4,8, G4,-4, REST,8, DS4,8,
-  E4,-8, FS4,8,  G4,-8, C5,8, B4,-8, E4,8, G4,-8, B4,8,   
-  
-  AS4,2, A4,-16, G4,-16, E4,-16, D4,-16, 
-  E4,-4, REST,4,
-  REST,4, E5,-8, D5,8, B4,-8, A4,8, G4,-8, E4,-8,
-  AS4,16, A4,-8, AS4,16, A4,-8, AS4,16, A4,-8, AS4,16, A4,-8,   
-  G4,-16, E4,-16, D4,-16, E4,16, E4,16, E4,2,
- 
+  AS4,4,  F4,-4,  AS4,8,  AS4,16,  C5,16, D5,16, DS5,16,
+  F5,2,  F5,8,  F5,8,  F5,8,  FS5,16, GS5,16,
+  AS5,-2,  AS5,8,  AS5,8,  GS5,8,  FS5,16,
+  GS5,-8,  FS5,16,  F5,2,  F5,4, 
+
+  DS5,-8, F5,16, FS5,2, F5,8, DS5,8,
+  CS5,-8, DS5,16, F5,2, DS5,8, CS5,8,
+  C5,-8, D5,16, E5,2, G5,8, 
+  F5,16, F4,16, F4,16, F4,16,F4,16,F4,16,F4,16,F4,16,F4,8, F4,16,F4,8,
+
+  AS4,4,  F4,-4,  AS4,8,  AS4,16,  C5,16, D5,16, DS5,16,
+  F5,2,  F5,8,  F5,8,  F5,8,  FS5,16, GS5,16,
+  AS5,-2, CS6,4,
+  C6,4, A5,2, F5,4,
+  FS5,-2, AS5,4,
+  A5,4, F5,2, F5,4,
+
+  FS5,-2, AS5,4,
+  A5,4, F5,2, D5,4,
+  DS5,-2, FS5,4,
+  F5,4, CS5,2, AS4,4,
+  C5,-8, D5,16, E5,2, G5,8, 
+  F5,16, F4,16, F4,16, F4,16,F4,16,F4,16,F4,16,F4,16,F4,8, F4,16,F4,8,
 };
-const int pinkPantherTempo = 160;
+const int zeldaTempo = 88;
 
 const PROGMEM int neverGonneGiveYouUpMelody[] = {
-  D5,-4, E5,-4, A4,4, //1
+  D5,-4, E5,-4, A4,4,
   E5,-4, FS5,-4, A5,16, G5,16, FS5,8,
   D5,-4, E5,-4, A4,2,
   A4,16, A4,16, B4,16, D5,8, D5,16,
-  D5,-4, E5,-4, A4,4, //repeat from 1
+  D5,-4, E5,-4, A4,4,
   E5,-4, FS5,-4, A5,16, G5,16, FS5,8,
   D5,-4, E5,-4, A4,2,
   A4,16, A4,16, B4,16, D5,8, D5,16,
   REST,4, B4,8, CS5,8, D5,8, D5,8, E5,8, CS5,-8,
   B4,16, A4,2, REST,4, 
 
-  REST,8, B4,8, B4,8, CS5,8, D5,8, B4,4, A4,8, //7
+  REST,8, B4,8, B4,8, CS5,8, D5,8, B4,4, A4,8,
   A5,8, REST,8, A5,8, E5,-4, REST,4, 
   B4,8, B4,8, CS5,8, D5,8, B4,8, D5,8, E5,8, REST,8,
   REST,8, CS5,8, B4,8, A4,-4, REST,4,
   REST,8, B4,8, B4,8, CS5,8, D5,8, B4,8, A4,4,
   E5,8, E5,8, E5,8, FS5,8, E5,4, REST,4,
    
-  D5,2, E5,8, FS5,8, D5,8, //13
+  D5,2, E5,8, FS5,8, D5,8,
   E5,8, E5,8, E5,8, FS5,8, E5,4, A4,4,
   REST,2, B4,8, CS5,8, D5,8, B4,8,
   REST,8, E5,8, FS5,8, E5,-4, A4,16, B4,16, D5,16, B4,16,
   FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16,
 
-  E5,-8, E5,-8, D5,-8, CS5,16, B4,-8, A4,16, B4,16, D5,16, B4,16, //18
+  E5,-8, E5,-8, D5,-8, CS5,16, B4,-8, A4,16, B4,16, D5,16, B4,16,
   D5,4, E5,8, CS5,-8, B4,16, A4,8, A4,8, A4,8, 
   E5,4, D5,2, A4,16, B4,16, D5,16, B4,16,
   FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16,
   A5,4, CS5,8, D5,-8, CS5,16, B4,8, A4,16, B4,16, D5,16, B4,16,
 
-  D5,4, E5,8, CS5,-8, B4,16, A4,4, A4,8,  //23
+  D5,4, E5,8, CS5,-8, B4,16, A4,4, A4,8,
   E5,4, D5,2, REST,4,
   REST,8, B4,8, D5,8, B4,8, D5,8, E5,4, REST,8,
   REST,8, CS5,8, B4,8, A4,-4, REST,4,
   REST,8, B4,8, B4,8, CS5,8, D5,8, B4,8, A4,4,
   REST,8, A5,8, A5,8, E5,8, FS5,8, E5,8, D5,8,
   
-  REST,8, A4,8, B4,8, CS5,8, D5,8, B4,8, //29
+  REST,8, A4,8, B4,8, CS5,8, D5,8, B4,8,
   REST,8, CS5,8, B4,8, A4,-4, REST,4,
   B4,8, B4,8, CS5,8, D5,8, B4,8, A4,4, REST,8,
   REST,8, E5,8, E5,8, FS5,4, E5,-4, 
   D5,2, D5,8, E5,8, FS5,8, E5,4, 
   E5,8, E5,8, FS5,8, E5,8, A4,8, A4,4,
 
-  REST,-4, A4,8, B4,8, CS5,8, D5,8, B4,8, //35
+  REST,-4, A4,8, B4,8, CS5,8, D5,8, B4,8,
   REST,8, E5,8, FS5,8, E5,-4, A4,16, B4,16, D5,16, B4,16,
   FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16,
   E5,-8, E5,-8, D5,-8, CS5,16, B4,8, A4,16, B4,16, D5,16, B4,16,
   D5,4, E5,8, CS5,-8, B4,16, A4,4, A4,8, 
 
-   E5,4, D5,2, A4,16, B4,16, D5,16, B4,16, //40
+   E5,4, D5,2, A4,16, B4,16, D5,16, B4,16,
   FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16,
   A5,4, CS5,8, D5,-8, CS5,16, B4,8, A4,16, B4,16, D5,16, B4,16,
   D5,4, E5,8, CS5,-8, B4,16, A4,4, A4,8,  
   E5,4, D5,2, A4,16, B4,16, D5,16, B4,16,
    
-  FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16, //45
+  FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16,
   A5,4, CS5,8, D5,-8, CS5,16, B4,8, A4,16, B4,16, D5,16, B4,16,
   D5,4, E5,8, CS5,-8, B4,16, A4,4, A4,8,  
   E5,4, D5,2, A4,16, B4,16, D5,16, B4,16,
-  FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16, //45
+  FS5,-8, FS5,-8, E5,-4, A4,16, B4,16, D5,16, B4,16,
   
   A5,4, CS5,8, D5,-8, CS5,16, B4,8, A4,16, B4,16, D5,16, B4,16,
   D5,4, E5,8, CS5,-8, B4,16, A4,4, A4,8, 
@@ -202,7 +211,7 @@ const PROGMEM int neverGonneGiveYouUpMelody[] = {
 const int neverGonnaGiveYouUpTempo = 114;
 
 const PROGMEM int starWarsMelody[] = {
-  AS4,8, AS4,8, AS4,8,//1
+  AS4,8, AS4,8, AS4,8,
   F5,2, C6,2,
   AS5,8, A5,8, G5,8, F6,2, C6,4,  
   AS5,8, A5,8, G5,8, F6,2, C6,4,  
@@ -210,86 +219,86 @@ const PROGMEM int starWarsMelody[] = {
   F5,2, C6,2,
   AS5,8, A5,8, G5,8, F6,2, C6,4,  
   
-  AS5,8, A5,8, G5,8, F6,2, C6,4, //8  
+  AS5,8, A5,8, G5,8, F6,2, C6,4,
   AS5,8, A5,8, AS5,8, G5,2, C5,-8, C5,16, 
   D5,-4, D5,8, AS5,8, A5,8, G5,8, F5,8,
   F5,8, G5,8, A5,8, G5,4, D5,8, E5,4,C5,-8, C5,16,
   D5,-4, D5,8, AS5,8, A5,8, G5,8, F5,8,
   
-  C6,-8, G5,16, G5,2, REST,8, C5,8,//13
+  C6,-8, G5,16, G5,2, REST,8, C5,8,
   D5,-4, D5,8, AS5,8, A5,8, G5,8, F5,8,
   F5,8, G5,8, A5,8, G5,4, D5,8, E5,4,C6,-8, C6,16,
   F6,4, DS6,8, CS6,4, C6,8, AS5,4, GS5,8, G5,4, F5,8,
-  C6,1
+  C6,1,
 };
-const int starWarsTempo = 150;
+const int starWarsTempo = 108;
 
 const PROGMEM int miiChannelMelody[] = {
-  FS4,8, REST,8, A4,8, CS5,8, REST,8,A4,8, REST,8, FS4,8, //1
+  FS4,8, REST,8, A4,8, CS5,8, REST,8,A4,8, REST,8, FS4,8,
   D4,8, D4,8, D4,8, REST,8, REST,4, REST,8, CS4,8,
   D4,8, FS4,8, A4,8, CS5,8, REST,8, A4,8, REST,8, F4,8,
   E5,-4, DS5,8, D5,8, REST,8, REST,4,
   
-  GS4,8, REST,8, CS5,8, FS4,8, REST,8,CS5,8, REST,8, GS4,8, //5
+  GS4,8, REST,8, CS5,8, FS4,8, REST,8,CS5,8, REST,8, GS4,8,
   REST,8, CS5,8, G4,8, FS4,8, REST,8, E4,8, REST,8,
   E4,8, E4,8, E4,8, REST,8, REST,4, E4,8, E4,8,
   E4,8, REST,8, REST,4, DS4,8, D4,8, 
 
-  CS4,8, REST,8, A4,8, CS5,8, REST,8,A4,8, REST,8, FS4,8, //9
+  CS4,8, REST,8, A4,8, CS5,8, REST,8,A4,8, REST,8, FS4,8,
   D4,8, D4,8, D4,8, REST,8, E5,8, E5,8, E5,8, REST,8,
   REST,8, FS4,8, A4,8, CS5,8, REST,8, A4,8, REST,8, F4,8,
   E5,2, D5,8, REST,8, REST,4,
 
-  B4,8, G4,8, D4,8, CS4,4, B4,8, G4,8, CS4,8, //13
+  B4,8, G4,8, D4,8, CS4,4, B4,8, G4,8, CS4,8,
   A4,8, FS4,8, C4,8, B3,4, F4,8, D4,8, B3,8,
   E4,8, E4,8, E4,8, REST,4, REST,4, AS4,4,
   CS5,8, D5,8, FS5,8, A5,8, REST,8, REST,4, 
 
-  REST,2, A3,4, AS3,4, //17 
+  REST,2, A3,4, AS3,4,
   A3,-4, A3,8, A3,2,
   REST,4, A3,8, AS3,8, A3,8, F4,4, C4,8,
   A3,-4, A3,8, A3,2,
 
-  REST,2, B3,4, C4,4, //21
+  REST,2, B3,4, C4,4,
   CS4,-4, C4,8, CS4,2,
   REST,4, CS4,8, C4,8, CS4,8, GS4,4, DS4,8,
   CS4,-4, DS4,8, B3,1,
   
-  E4,4, E4,4, E4,4, REST,8,//25
+  E4,4, E4,4, E4,4, REST,8,
 
-  FS4,8, REST,8, A4,8, CS5,8, REST,8,A4,8, REST,8, FS4,8, //1
+  FS4,8, REST,8, A4,8, CS5,8, REST,8,A4,8, REST,8, FS4,8,
   D4,8, D4,8, D4,8, REST,8, REST,4, REST,8, CS4,8,
   D4,8, FS4,8, A4,8, CS5,8, REST,8, A4,8, REST,8, F4,8,
   E5,-4, DS5,8, D5,8, REST,8, REST,4,
   
-  GS4,8, REST,8, CS5,8, FS4,8, REST,8,CS5,8, REST,8, GS4,8, //5
+  GS4,8, REST,8, CS5,8, FS4,8, REST,8,CS5,8, REST,8, GS4,8,
   REST,8, CS5,8, G4,8, FS4,8, REST,8, E4,8, REST,8,
   E4,8, E4,8, E4,8, REST,8, REST,4, E4,8, E4,8,
   E4,8, REST,8, REST,4, DS4,8, D4,8, 
 
-  CS4,8, REST,8, A4,8, CS5,8, REST,8,A4,8, REST,8, FS4,8, //9
+  CS4,8, REST,8, A4,8, CS5,8, REST,8,A4,8, REST,8, FS4,8,
   D4,8, D4,8, D4,8, REST,8, E5,8, E5,8, E5,8, REST,8,
   REST,8, FS4,8, A4,8, CS5,8, REST,8, A4,8, REST,8, F4,8,
   E5,2, D5,8, REST,8, REST,4,
 
-  B4,8, G4,8, D4,8, CS4,4, B4,8, G4,8, CS4,8, //13
+  B4,8, G4,8, D4,8, CS4,4, B4,8, G4,8, CS4,8,
   A4,8, FS4,8, C4,8, B3,4, F4,8, D4,8, B3,8,
   E4,8, E4,8, E4,8, REST,4, REST,4, AS4,4,
   CS5,8, D5,8, FS5,8, A5,8, REST,8, REST,4, 
 
-  REST,2, A3,4, AS3,4, //17 
+  REST,2, A3,4, AS3,4,
   A3,-4, A3,8, A3,2,
   REST,4, A3,8, AS3,8, A3,8, F4,4, C4,8,
   A3,-4, A3,8, A3,2,
 
-  REST,2, B3,4, C4,4, //21
+  REST,2, B3,4, C4,4,
   CS4,-4, C4,8, CS4,2,
   REST,4, CS4,8, C4,8, CS4,8, GS4,4, DS4,8,
   CS4,-4, DS4,8, B3,1,
   
-  E4,4, E4,4, E4,4, REST,8,//25
+  E4,4, E4,4, E4,4, REST,8,
 };
-const int miiChannelTempo = 154;
+const int miiChannelTempo = 114;
 
 const PROGMEM int canonInDMelody[] = {
   FS4,2, E4,2,
@@ -325,16 +334,16 @@ const PROGMEM int canonInDMelody[] = {
   CS4,8, D4,8, A3,8, B3,8, CS4,8, D4,8, E4,8,
   FS4,8, G4,8, A4,2,  
 };
-const int canonInDTempo = 140;
+const int canonInDTempo = 100;
 
 const PROGMEM int minuetInGMelody[] = {
-  D5,4, G4,8, A4,8, B4,8, C5,8, //1
+  D5,4, G4,8, A4,8, B4,8, C5,8,
   D5,4, G4,4, G4,4,
   E5,4, C5,8, D5,8, E5,8, FS5,8,
   G5,4, G4,4, G4,4,
   C5,4, D5,8, C5,8, B4,8, A4,8,
   
-  B4,4, C5,8, B4,8, A4,8, G4,8,//6
+  B4,4, C5,8, B4,8, A4,8, G4,8,
   FS4,4, G4,8, A4,8, B4,8, G4,8,
   A4,-2,
   D5,4, G4,8, A4,8, B4,8, C5,8, 
@@ -342,18 +351,18 @@ const PROGMEM int minuetInGMelody[] = {
   E5,4, C5,8, D5,8, E5,8, FS5,8,
   
   G5,4, G4,4, G4,4,
-  C5,4, D5,8, C5,8, B4,8, A4,8, //12
+  C5,4, D5,8, C5,8, B4,8, A4,8,
   B4,4, C5,8, B4,8, A4,8, G4,8,
   A4,4, B4,8, A4,8, G4,8, FS4,8,
   G4,-2,
 
-  D5,4, G4,8, A4,8, B4,8, C5,8, //1
+  D5,4, G4,8, A4,8, B4,8, C5,8,
   D5,4, G4,4, G4,4,
   E5,4, C5,8, D5,8, E5,8, FS5,8,
   G5,4, G4,4, G4,4,
   C5,4, D5,8, C5,8, B4,8, A4,8,
   
-  B4,4, C5,8, B4,8, A4,8, G4,8,//6
+  B4,4, C5,8, B4,8, A4,8, G4,8,
   FS4,4, G4,8, A4,8, B4,8, G4,8,
   A4,-2,
   D5,4, G4,8, A4,8, B4,8, C5,8, 
@@ -361,39 +370,39 @@ const PROGMEM int minuetInGMelody[] = {
   E5,4, C5,8, D5,8, E5,8, FS5,8,
   
   G5,4, G4,4, G4,4,
-  C5,4, D5,8, C5,8, B4,8, A4,8, //12
+  C5,4, D5,8, C5,8, B4,8, A4,8,
   B4,4, C5,8, B4,8, A4,8, G4,8,
   A4,4, B4,8, A4,8, G4,8, FS4,8,
   G4,-2,
 
-  B5,4, G5,8, A5,8, B5,8, G5,8,//17
+  B5,4, G5,8, A5,8, B5,8, G5,8,
   A5,4, D5,8, E5,8, FS5,8, D5,8,
   G5,4, E5,8, FS5,8, G5,8, D5,8,
   CS5,4, B4,8, CS5,8, A4,4,
   A4,8, B4,8, CS5,8, D5,8, E5,8, FS5,8,
 
-  G5,4, FS5,4, E5,4, //22
+  G5,4, FS5,4, E5,4,
   FS5,4, A4,4, CS5,4,
   D5,-2,
   D5,4, G4,8, FS5,8, G4,4,
   E5,4,  G4,8, FS4,8, G4,4,
   D5,4, C5,4, B4,4,
 
-  A4,8, G4,8, FS4,8, G4,8, A4,4, //28
+  A4,8, G4,8, FS4,8, G4,8, A4,4,
   D4,8, E4,8, FS4,8, G4,8, A4,8, B4,8,
   C5,4, B4,4, A4,4,
   B4,8, D5,8, G4,4, FS4,4,
   G4,-2,
 };
-const int minuetInDTempo = 180;
+const int minuetInDTempo = 140;
 
 const int* melodies[] = {
-  tetrisMelody, pinkPantherMelody, neverGonneGiveYouUpMelody, starWarsMelody, miiChannelMelody, canonInDMelody, minuetInGMelody
+  tetrisMelody, zeldaMelody, neverGonneGiveYouUpMelody, starWarsMelody, miiChannelMelody, canonInDMelody, minuetInGMelody
 };
 const int tempos[] = {
-  tetrisTempo, pinkPantherTempo, neverGonnaGiveYouUpTempo, starWarsTempo, miiChannelTempo, canonInDTempo, minuetInDTempo
+  tetrisTempo, zeldaTempo, neverGonnaGiveYouUpTempo, starWarsTempo, miiChannelTempo, canonInDTempo, minuetInDTempo
 };
-const int musicNotes[] = {99, 311, 311, 311, 311, 311, 311}; 
+const int musicNotes[] = {99, 110, 311, 88, 286, 124, 190}; 
 
 // Misc Vars
 int currentMelodyTempo = 0;
@@ -716,8 +725,6 @@ void loop() {
       resetGame();
     }
     if (!lastInteractState && interactState) {
-      currentMelodyTempo++;
-      currentMelodyTempo %= 6;
       resetMusic();
     }
   } else {
