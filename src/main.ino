@@ -154,23 +154,23 @@ const int* melodies[] = {
 const int tempos[] = {
   tetrisTempo, neverGonnaGiveYouUpTempo
 };
+const int musicNotes[] = {99, 310};
 
 // Misc Vars
 int currentMelodyTempo = 0;
-int musicNotes[] = {99, 311}; 
 int musicDivider = 0;
 int noteDuration = 0;
 int wholenote = (60000 * 4) / tempos[currentMelodyTempo];
 int currentNote = 0;
 
-long score = 1;
-long scoreAddition = 1;
+unsigned long score = 1;
+unsigned long scoreAddition = 1;
 int state = 0;
 int difficulty = 0;
 bool clockwise = true;
 
 int currentLed = 0;
-long currentTime = 0;
+unsigned long currentTime = millis();
 
 int targetLed = random(8, 27);
 int targetLedS = targetLed + 1;
@@ -180,8 +180,8 @@ int lastStartState = 0;
 int interactState = 0;
 int lastInteractState = 0;
 
-int gameRunLR = 0;
-int musicPlayLR = 0;
+unsigned long gameRunLR = 0;
+unsigned long musicPlayLR = 0;
 int convertResult[4] = {0, 0, 0, 0};
 int scoreResult[4] = {0, 0, 0, 0};
 
@@ -198,8 +198,15 @@ void resetGame() {
 
 // reset music state
 void resetMusic() {
+  musicDivider = 0;
+  noteDuration = 1000;
   wholenote = (60000 * 4) / tempos[currentMelodyTempo];
   currentNote = 0;
+  if (currentMelodyTempo == 0) {
+    currentMelodyTempo = 1;    
+  } else {
+    currentMelodyTempo = 0;
+  }
 }
 
 // Setup for starting LED screen and pin output.
@@ -221,7 +228,7 @@ void setup() {
 void playMusic() {
   if (currentTime - musicPlayLR >= noteDuration) {
     // stop any tones
-    noTone(speakerPin);
+    // noTone(speakerPin);
     // calculates the duration of each note
     musicDivider = melodies[currentMelodyTempo][currentNote + 1];
     if (musicDivider > 0) {
@@ -239,9 +246,8 @@ void playMusic() {
     musicPlayLR = currentTime;
     currentNote += 2;
 
-    // we can avoid race conditinos since it's single core
-    if (currentNote / 2 == musicNotes[currentMelodyTempo]) {
-      noTone(speakerPin);
+    // we can avoid race conditions since it's single core
+    if (currentNote / 2 >= musicNotes[currentMelodyTempo]) {
       resetMusic();
     }
   }
@@ -403,10 +409,14 @@ void gameRun() {
 
     if (clockwise) {
       currentLed++;
+      currentLed %= 28;
     } else {
-      currentLed--;
+      if (currentLed == 0) {
+        currentLed = 27;
+      } else {
+        currentLed --;
+      }
     }
-    currentLed %= 28;
     
     gameRunLR = currentTime;
   }
