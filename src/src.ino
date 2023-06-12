@@ -405,28 +405,27 @@ const int tempos[] = {
 const int musicNotes[] = {99, 110, 311, 88, 286, 124, 190}; 
 
 // Misc Vars
-int currentMelodyTempo = 0;
-unsigned long musicDivider = 0;
-unsigned long noteDuration = 0;
-unsigned long wholenote = (60000 * 4) / tempos[currentMelodyTempo];
-int currentNote = 0;
+unsigned int currentTrack = 0;
+unsigned int currentNote = 0;
+unsigned int musicDivider = 0;
+unsigned int noteDuration = 0;
+unsigned int wholenote = (60000 * 4) / tempos[currentTrack];
 
-unsigned long score = 1;
-unsigned long scoreAddition = 1;
-int state = 0;
-int difficulty = 0;
+unsigned long score = 0;
+unsigned long scoreAddition = 0;
+unsigned int state = 0;
+unsigned int difficulty = 0;
 bool clockwise = true;
 
-int currentLed = 0;
-unsigned long currentTime = millis();
+unsigned int currentLed = 0;
+unsigned long currentTime = 0;
+unsigned int targetLed = random(6, 27);
+unsigned int targetLedS = targetLed + 1;
 
-int targetLed = random(8, 27);
-int targetLedS = targetLed + 1;
-
-int startState = 0;
-int lastStartState = 0;
-int interactState = 0;
-int lastInteractState = 0;
+byte startState = LOW;
+byte lastStartState = LOW;
+byte interactState = LOW;
+byte lastInteractState = LOW;
 
 unsigned long gameRunLR = 0;
 unsigned long musicPlayLR = 0;
@@ -450,10 +449,10 @@ void resetGame() {
 void resetMusic() {
   musicDivider = 0;
   noteDuration = 1000;
-  wholenote = (60000 * 4) / tempos[currentMelodyTempo];
+  wholenote = (60000 * 4) / tempos[currentTrack];
   currentNote = 0;
-  currentMelodyTempo++;
-  currentMelodyTempo %= 7;
+  currentTrack++;
+  currentTrack %= 7;
 }
 
 // Setup for starting LED screen and pin output.
@@ -476,7 +475,7 @@ void playMusic() {
   if (currentTime - musicPlayLR >= noteDuration) {
     // stop any tones
     // calculates the duration of each note
-    musicDivider = pgm_read_word(&melodies[currentMelodyTempo][currentNote + 1]);
+    musicDivider = pgm_read_word(&melodies[currentTrack][currentNote + 1]);
     if (musicDivider > 0) {
       // regular note, just proceed
       noteDuration = (wholenote) / musicDivider;
@@ -486,7 +485,7 @@ void playMusic() {
       noteDuration *= 1.5; // increases the duration in half for dotted notes
     }
 
-    currentPitch = pgm_read_word(&melodies[currentMelodyTempo][currentNote]);
+    currentPitch = pgm_read_word(&melodies[currentTrack][currentNote]);
 
     // we only play the note for 90% of the duration, leaving 10% as a pause
     tone(speakerPin, currentPitch, noteDuration * 0.9);
@@ -495,7 +494,7 @@ void playMusic() {
     currentNote += 2;
 
     // we can avoid race conditions since it's single core
-    if (currentNote / 2 >= musicNotes[currentMelodyTempo]) {
+    if (currentNote / 2 >= musicNotes[currentTrack]) {
       resetMusic();
     }
   }
