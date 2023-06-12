@@ -158,7 +158,8 @@ const int tempos[] = {
 // Misc Vars
 int currentMelodyTempo = 0;
 int musicNotes[] = {99, 311}; 
-int musicDivider = 0, noteDuration = 0;
+int musicDivider = 0;
+int noteDuration = 0;
 int wholenote = (60000 * 4) / tempos[currentMelodyTempo];
 int currentNote = 0;
 
@@ -184,9 +185,6 @@ int musicPlayLR = 0;
 int convertResult[4] = {0, 0, 0, 0};
 int scoreResult[4] = {0, 0, 0, 0};
 
-int scoreAnimationCount = 0;
-int scoreAnimationDivisor = 0;
-
 // Resets state variables for a fresh game
 void resetGame() {
   score = 0;
@@ -196,9 +194,6 @@ void resetGame() {
 
   targetLed = random(8, 27);
   targetLedS = targetLed + 1;
-
-  scoreAnimationCount = 0;
-  scoreAnimationDivisor = 0;
 }
 
 // reset music state
@@ -219,8 +214,8 @@ void setup() {
   pinMode(interactPin, INPUT);
   pinMode(speakerPin, OUTPUT);
 
-  renderDifficulty();
   randomSeed(analogRead(seedPin));
+  renderDifficulty();
 }
 
 void playMusic() {
@@ -231,10 +226,10 @@ void playMusic() {
     musicDivider = melodies[currentMelodyTempo][currentNote + 1];
     if (musicDivider > 0) {
       // regular note, just proceed
-      noteDuration = (wholenote) / musicDivider;
+      noteDuration = wholenote / musicDivider;
     } else if (musicDivider < 0) {
       // dotted notes are represented with negative durations!!
-      noteDuration = (wholenote) / abs(musicDivider);
+      noteDuration = wholenote / abs(musicDivider);
       noteDuration *= 1.5; // increases the duration in half for dotted notes
     }
 
@@ -244,7 +239,9 @@ void playMusic() {
     musicPlayLR = currentTime;
     currentNote += 2;
 
-    if (currentNote / 2 >= musicNotes[currentMelodyTempo]) {
+    // we can avoid race conditinos since it's single core
+    if (currentNote / 2 == musicNotes[currentMelodyTempo]) {
+      noTone(speakerPin);
       resetMusic();
     }
   }
@@ -406,16 +403,11 @@ void gameRun() {
 
     if (clockwise) {
       currentLed++;
-      currentLed %= 28;
     } else {
-      if (currentLed == 0) {
-          currentLed = 27;
-      } else {
-          currentLed--;
-      }
+      currentLed--;
     }
+    currentLed %= 28;
     
-
     gameRunLR = currentTime;
   }
 
