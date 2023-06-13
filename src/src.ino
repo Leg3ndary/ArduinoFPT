@@ -560,10 +560,12 @@ int* scoreConvert(long scoreTemp) {
   return scoreResult;
 }
 
-// Shift out the data to the set bitShifter
-void shiftOut(byte dataOut, int bitShifter) {
+// Display data through a bitshifter
+void displayBitShifter(byte dataOut, int bitShifter) {
+  // Set latchPin low to allow data flow
+  digitalWrite(latchPins[i], LOW);
   // Shift out 8 bits LSB first, on rising edge of clock
-  boolean pinState;
+  bool pinState;
   // Clear shift register ready for sending data
   digitalWrite(dataPins[bitShifter], LOW);
   digitalWrite(clockPins[bitShifter], LOW);
@@ -584,14 +586,22 @@ void shiftOut(byte dataOut, int bitShifter) {
   }
   // Stop shifting out data
   digitalWrite(clockPins[bitShifter], LOW);
+  // Set latchPin to high to lock and send data
+  digitalWrite(latchPins[i], HIGH);
+}
+
+void displayScore() {
+  int* converted = scoreConvert(score);
+
+  for (int i = 0; i < 4; i++) {
+    displayBitShifter(converted[i], i);
+  }
 }
 
 // Clears all Led's of state (not really, explained later)
 void clearLeds() {
   for (int i = 0; i < 4; i++) {
-    digitalWrite(latchPins[i], LOW);
-    shiftOut(1, i);
-    digitalWrite(latchPins[i], HIGH);
+    displayBitShifter(1, i);
   }
 }
 
@@ -603,9 +613,7 @@ void renderDifficulty() {
   int* converted = convert(toConvert);
 
   for (int i = 0; i < 4; i++) {
-    digitalWrite(latchPins[i], LOW); 
-    shiftOut(converted[i], i);
-    digitalWrite(latchPins[i], HIGH);
+    displayBitShifter(converted[i], i);
   }
 }
 
@@ -628,13 +636,13 @@ void gameRun() {
       if (currentLed == (targetLedS + 2) % 28) {
         state++;
         score *= difficulty;
-        gameOver();
+        displayScore();
       }
     } else {
       if (currentLed == (targetLedS + 26) % 28) {
         state++;
         score *= difficulty;
-        gameOver();
+        displayScore();
       }
     }
 
@@ -642,12 +650,7 @@ void gameRun() {
     int* converted = convert(toConvert);
 
     for (int i = 0; i < 4; i++) {
-      // Set latchPin low to allow data flow
-      digitalWrite(latchPins[i], LOW);
-      
-      shiftOut(converted[i], i);
-      // Set latchPin to high to lock and send data
-      digitalWrite(latchPins[i], HIGH);
+      displayBitShifter(converted[i], i);
     }
 
     if (clockwise) {
@@ -669,49 +672,44 @@ void gameRun() {
     } else {
       state++;
       score *= difficulty;
-      gameOver();
+      displayScore();
     }
   }
 }
 
 // Gameover score display iterator
 void gameOver() {
-  int* converted = scoreConvert(score);
-
-  for (int i = 0; i < 4; i++) {
-    // Set latchPin low to allow data flow
-    digitalWrite(latchPins[i], LOW);
-
-    shiftOut(converted[i], i);
-    // Set latchPin to high to lock and send data
-    digitalWrite(latchPins[i], HIGH);
+  if (!lastStartState && startState) {
+    state++;
+    renderDifficulty();
+    resetGame();
+  }
+  if (!lastInteractState && interactState) {
+    resetMusic();
   }
 }
 
 // Main synchronous loop
 void loop() {
   currentTime = millis();
+
   startState = digitalRead(startPin);
   interactState = digitalRead(interactPin);
 
   playMusic();
 
-  if (state == 0) {
-    gameMain();
-  } else if (state == 1)
-  {
-    gameRun();
-  } else if (state == 2) {
-    if (!lastStartState && startState) {
-      state++;
-      renderDifficulty();
-      resetGame();
-    }
-    if (!lastInteractState && interactState) {
-      resetMusic();
-    }
-  } else {
-    state = 0;
+  switch (state) {
+    case 0:
+      gameMain();
+      break;
+    case 1:
+      gameRun();
+      break;
+    case 2:
+      gameOver();
+      break;
+    default:
+      state = 0;
   }
 
   lastStartState = startState;
