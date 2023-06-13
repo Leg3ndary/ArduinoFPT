@@ -185,7 +185,7 @@ const PROGMEM int neverGonneGiveYouUpMelody[] = {
 
   E5,4, D5,2, REST,4
 };
-const int neverGonnaGiveYouUpTempo = 114;
+const int neverGonnaGiveYouUpTempo = 144;
 
 const PROGMEM int starWarsMelody[] = {
   AS4,8, AS4,8, AS4,8,
@@ -311,7 +311,7 @@ const PROGMEM int canonInDMelody[] = {
   CS4,8, D4,8, A3,8, B3,8, CS4,8, D4,8, E4,8,
   FS4,8, G4,8, A4,2,  
 };
-const int canonInDTempo = 100;
+const int canonInDTempo = 150;
 
 const PROGMEM int minuetInGMelody[] = {
   D5,4, G4,8, A4,8, B4,8, C5,8,
@@ -382,11 +382,11 @@ const int tempos[] = {
 const int musicNotes[] = {99, 110, 311, 88, 286, 124, 190}; 
 
 // Misc Vars
-unsigned int currentTrack = 0;
-unsigned int currentNote = 0;
-unsigned int musicDivider = 0;
-unsigned int noteDuration = 0;
-unsigned int wholenote = (60000 * 4) / tempos[currentTrack];
+int currentTrack = 0;
+int currentNote = 0;
+int musicDivider = 0;
+int noteDuration = 0;
+int wholenote = (60000 * 4) / tempos[currentTrack];
 
 unsigned long score = 0;
 unsigned long scoreAddition = 0;
@@ -394,10 +394,10 @@ unsigned int state = 0;
 unsigned int difficulty = 0;
 bool clockwise = true;
 
-unsigned int currentLed = 0;
+int currentLed = 0;
 unsigned long currentTime = 0;
-unsigned int targetLed = random(6, 27);
-unsigned int targetLedS = targetLed + 1;
+int targetLed = random(6, 27);
+int targetLedS = targetLed + 1;
 
 byte startState = LOW;
 byte lastStartState = LOW;
@@ -480,7 +480,11 @@ void playMusic() {
 // Just generates new values for targets a minimum of 5 leds away.
 void generateTargets(int current) {
   targetLed = random(current + 5, current + 24) % 28;
-  targetLedS = (targetLed + 1) % 28;
+  if (clockwise) {
+    targetLedS = (targetLed + 1) % 28;
+  } else {
+    targetLedS = (targetLed + 27) % 28;
+  }
 }
 
 // Custom power function that starts from power 1 instead of 0.
@@ -563,7 +567,7 @@ int* scoreConvert(long scoreTemp) {
 // Display data through a bitshifter
 void displayBitShifter(byte dataOut, int bitShifter) {
   // Set latchPin low to allow data flow
-  digitalWrite(latchPins[i], LOW);
+  digitalWrite(latchPins[bitShifter], LOW);
   // Shift out 8 bits LSB first, on rising edge of clock
   bool pinState;
   // Clear shift register ready for sending data
@@ -587,7 +591,7 @@ void displayBitShifter(byte dataOut, int bitShifter) {
   // Stop shifting out data
   digitalWrite(clockPins[bitShifter], LOW);
   // Set latchPin to high to lock and send data
-  digitalWrite(latchPins[i], HIGH);
+  digitalWrite(latchPins[bitShifter], HIGH);
 }
 
 void displayScore() {
@@ -632,20 +636,20 @@ void gameMain() {
 // Game run iteration func
 void gameRun() {
   if (currentTime - gameRunLR >= speeds[difficulty] - score) {
-    if (clockwise) {
-      if (currentLed == (targetLedS + 2) % 28) {
+    if (!lastInteractState && interactState) {
+      if (currentLed == targetLed || currentLed == targetLedS) {
+        score++;
+        scoreAddition++;
+        clockwise = !clockwise;
+        generateTargets(currentLed);
+      } else {
         state++;
         score *= difficulty;
         displayScore();
-      }
-    } else {
-      if (currentLed == (targetLedS + 26) % 28) {
-        state++;
-        score *= difficulty;
-        displayScore();
+        return;
       }
     }
-
+    
     int toConvert[] = {currentLed, targetLed, targetLedS};
     int* converted = convert(toConvert);
 
@@ -660,20 +664,13 @@ void gameRun() {
     }
     currentLed %= 28;
 
-    gameRunLR = currentTime;
-  }
-
-  if (!lastInteractState && interactState) {
-    if (currentLed == targetLedS || clockwise && currentLed == (targetLedS + 1) % 28 || !clockwise && currentLed == (targetLed + 27) % 28) {
-      score++;
-      scoreAddition++;
-      clockwise = !clockwise;
-      generateTargets(currentLed);
-    } else {
+    if (clockwise && currentLed == (targetLedS + 1) % 28 || !clockwise && currentLed == (targetLedS + 27) % 28) {
       state++;
       score *= difficulty;
       displayScore();
     }
+
+    gameRunLR = currentTime;
   }
 }
 
@@ -698,18 +695,14 @@ void loop() {
 
   playMusic();
 
-  switch (state) {
-    case 0:
-      gameMain();
-      break;
-    case 1:
-      gameRun();
-      break;
-    case 2:
-      gameOver();
-      break;
-    default:
-      state = 0;
+  if (state == 0) {
+    gameMain();
+  } else if (state == 1) {
+    gameRun();
+  } else if (state == 2) {
+    gameOver();
+  } else {
+    state = 0;
   }
 
   lastStartState = startState;
