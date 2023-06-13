@@ -50,29 +50,6 @@ const int seedPin = 18;
 const int speakerPin = 19;
 
 const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
-const int difficultyLeds[7][4] = {
-  {
-    240, 0, 0, 0
-  },
-  {
-    255, 128, 0, 0
-  },
-  {
-    255, 248, 0, 0
-  },
-  {
-    255, 255, 192, 0 
-  },
-  {
-    255, 255, 252, 0
-  },
-  {
-    255, 255, 255, 224
-  },
-  {
-    255, 255, 255, 255
-  }
-};
 
 // Melodies are all from https://github.com/robsoncouto/arduino-songs/blob/master/harrypotter/harrypotter.ino
 const PROGMEM int tetrisMelody[] = {
@@ -524,7 +501,7 @@ int* convert(int* leds) {
     {0, 0, 0, 0, 0, 0, 0},
   };
 
-  for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]) + 1; i++) {
+  for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]) + 2; i++) {
     int bitShifter = leds[i] / 7;
     int bit = leds[i] % 7;
     binary[bitShifter][bit] = 1;
@@ -620,9 +597,14 @@ void clearLeds() {
 
 // Specific rendering for difficulty at the start of the game.  
 void renderDifficulty() {
+  int base = difficulty * 4;
+  int toConvert[] = {base, base + 1, base + 2, base + 3};
+
+  int* converted = convert(toConvert);
+
   for (int i = 0; i < 4; i++) {
     digitalWrite(latchPins[i], LOW); 
-    shiftOut(difficultyLeds[difficulty][i], i);
+    shiftOut(converted[i], i);
     digitalWrite(latchPins[i], HIGH);
   }
 }
