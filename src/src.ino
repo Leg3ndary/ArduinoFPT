@@ -616,11 +616,13 @@ void gameRun() {
       if (currentLed == (targetLedS + 1) % 28) {
         state++;
         score *= difficulty;
+        gameOver();
       }
     } else {
       if (currentLed == (targetLedS - 1) % 28) {
         state++;
         score *= difficulty;
+        gameOver();
       }
     }
 
@@ -659,6 +661,7 @@ void gameRun() {
     } else {
       state++;
       score *= difficulty;
+      gameOver();
       return;
     }
   }
@@ -699,7 +702,6 @@ void loop() {
   {
     gameRun();
   } else if (state == 2) {
-    gameOver();
     if (!lastStartState && startState) {
       state++;
       renderDifficulty();
