@@ -609,17 +609,29 @@ void renderDifficulty() {
   }
 }
 
+// Game Main Menu Function
+void gameMain() {
+  if (!lastInteractState && interactState) {
+    difficulty++;
+    difficulty %= 7;
+    renderDifficulty();
+  }
+  if (!lastStartState && startState) {
+    state++;
+  }
+}
+
 // Game run iteration func
 void gameRun() {
   if (currentTime - gameRunLR >= speeds[difficulty] - score) {
     if (clockwise) {
-      if (currentLed == (targetLedS + 1) % 28) {
+      if (currentLed == (targetLedS + 2) % 28) {
         state++;
         score *= difficulty;
         gameOver();
       }
     } else {
-      if (currentLed == (targetLedS - 1) % 28) {
+      if (currentLed == (targetLedS + 26) % 28) {
         state++;
         score *= difficulty;
         gameOver();
@@ -640,20 +652,16 @@ void gameRun() {
 
     if (clockwise) {
       currentLed++;
-      currentLed %= 28;
     } else {
-      if (currentLed == 0) {
-        currentLed = 27;
-      } else {
-        currentLed --;
-      }
+      currentLed += 27;
     }
+    currentLed %= 28;
 
     gameRunLR = currentTime;
   }
 
   if (!lastInteractState && interactState) {
-    if (currentLed == targetLed || currentLed == targetLedS) {
+    if (currentLed == targetLedS || clockwise && currentLed == (targetLedS + 1) % 28 || !clockwise && currentLed == (targetLed + 27) % 28) {
       score++;
       scoreAddition++;
       clockwise = !clockwise;
@@ -662,7 +670,6 @@ void gameRun() {
       state++;
       score *= difficulty;
       gameOver();
-      return;
     }
   }
 }
@@ -690,14 +697,7 @@ void loop() {
   playMusic();
 
   if (state == 0) {
-    if (!lastInteractState && interactState) {
-      difficulty++;
-      difficulty %= 7;
-      renderDifficulty();
-    }
-    if (!lastStartState && startState) {
-      state++;
-    }
+    gameMain();
   } else if (state == 1)
   {
     gameRun();
