@@ -384,9 +384,9 @@ const int musicNotes[] = {99, 110, 311, 88, 286, 124, 190};
 // Misc Vars
 int currentTrack = 0;
 int currentNote = 0;
-int musicDivider = 0;
-int noteDuration = 0;
-int wholenote = (60000 * 4) / tempos[currentTrack];
+long musicDivider = 0;
+long noteDuration = 0;
+long wholenote = (60000 * 4) / tempos[currentTrack];
 
 long score = 0;
 long scoreAddition = 0;
@@ -430,6 +430,10 @@ void resetMusic() {
   currentNote = 0;
   currentTrack++;
   currentTrack %= 7;
+}
+
+void advanceGame() {
+  state++;
 }
 
 // Setup for starting LED screen and pin output.
@@ -622,27 +626,13 @@ void gameMain() {
     renderDifficulty();
   }
   if (!lastStartState && startState) {
-    state++;
+    advanceGame();
   }
 }
 
 // Game run iteration func
 void gameRun() {
-  if (currentTime - gameRunLR >= speeds[difficulty] - score) {
-    if (!lastInteractState && interactState) {
-      if (currentLed == targetLed || currentLed == targetLedS) {
-        score++;
-        scoreAddition++;
-        clockwise = !clockwise;
-        generateTargets(currentLed);
-      } else {
-        state++;
-        score *= difficulty;
-        displayScore();
-        return;
-      }
-    }
-    
+  if (currentTime - gameRunLR >= speeds[difficulty] - score) {   
     int toConvert[] = {currentLed, targetLed, targetLedS};
     int* converted = convert(toConvert);
 
@@ -658,19 +648,33 @@ void gameRun() {
     currentLed %= 28;
 
     if (clockwise && currentLed == (targetLedS + 1) % 28 || !clockwise && currentLed == (targetLedS + 27) % 28) {
-      state++;
+      advanceGame();
       score *= difficulty;
       displayScore();
+      return;
     }
 
     gameRunLR = currentTime;
+  }
+
+  if (!lastInteractState && interactState) {
+    if (currentLed == targetLed || currentLed == targetLedS) {
+      score++;
+      scoreAddition++;
+      clockwise = !clockwise;
+      generateTargets(currentLed);
+    } else {
+      advanceGame();
+      score *= difficulty;
+      displayScore();
+    }
   }
 }
 
 // Gameover score display iterator
 void gameOver() {
   if (!lastStartState && startState) {
-    state++;
+    advanceGame();
     renderDifficulty();
     resetGame();
   }
