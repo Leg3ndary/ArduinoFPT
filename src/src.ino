@@ -425,7 +425,7 @@ void resetGame() {
 // reset music state
 void resetMusic() {
   musicDivider = 0;
-  noteDuration = 1000;
+  noteDuration = 0;
   wholenote = (60000 * 4) / tempos[currentTrack];
   currentNote = 0;
   currentTrack++;
@@ -599,13 +599,6 @@ void displayScore() {
 
   for (int i = 0; i < 4; i++) {
     displayBitShifter(converted[i], i);
-  }
-}
-
-// Clears all Led's of state (not really, explained later)
-void clearLeds() {
-  for (int i = 0; i < 4; i++) {
-    displayBitShifter(1, i);
   }
 }
 
