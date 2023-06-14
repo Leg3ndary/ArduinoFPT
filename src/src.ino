@@ -383,21 +383,21 @@ const int musicNotes[] = {99, 110, 311, 88, 286, 124, 190};
 
 // Misc Vars
 int currentTrack = 0;
-int currentNote = 0;
+long currentNote = 0;
 long musicDivider = 0;
 long noteDuration = 0;
 long wholenote = (60000 * 4) / tempos[currentTrack];
 
 long score = 0;
-long scoreAddition = 0;
+long scoreAddition = 1;
 int state = 0;
 int difficulty = 0;
 bool clockwise = true;
 
-int currentLed = 0;
+long currentLed = 0;
 long currentTime = 0;
-int targetLed = random(6, 27);
-int targetLedS = targetLed + 1;
+long targetLed = random(6, 27);
+long targetLedS = targetLed + 1;
 
 byte startState = LOW;
 byte lastStartState = LOW;
@@ -659,7 +659,7 @@ void gameRun() {
 
   if (!lastInteractState && interactState) {
     if (currentLed == targetLed || currentLed == targetLedS) {
-      score++;
+      score += scoreAddition;
       scoreAddition++;
       clockwise = !clockwise;
       generateTargets(currentLed);
