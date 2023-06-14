@@ -388,14 +388,14 @@ int musicDivider = 0;
 int noteDuration = 0;
 int wholenote = (60000 * 4) / tempos[currentTrack];
 
-unsigned long score = 0;
-unsigned long scoreAddition = 0;
-unsigned int state = 0;
-unsigned int difficulty = 0;
+long score = 0;
+long scoreAddition = 0;
+int state = 0;
+int difficulty = 0;
 bool clockwise = true;
 
 int currentLed = 0;
-unsigned long currentTime = 0;
+long currentTime = 0;
 int targetLed = random(6, 27);
 int targetLedS = targetLed + 1;
 
@@ -404,12 +404,12 @@ byte lastStartState = LOW;
 byte interactState = LOW;
 byte lastInteractState = LOW;
 
-unsigned long gameRunLR = 0;
-unsigned long musicPlayLR = 0;
+long gameRunLR = 0;
+long musicPlayLR = 0;
 int convertResult[4] = {0, 0, 0, 0};
 int scoreResult[4] = {0, 0, 0, 0};
 
-unsigned long currentPitch = 0;
+long currentPitch = 0;
 
 // Resets state variables for a fresh game
 void resetGame() {
