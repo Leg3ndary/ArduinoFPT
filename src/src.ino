@@ -287,10 +287,10 @@ int* scoreConvert(long scoreTemp) {
 
 // Display data through a bitshifter
 void displayBitShifter(byte dataOut, int bitShifter) {
-  // Set latchPin low to allow data flow
-  digitalWrite(latchPins[bitShifter], LOW);
   // Shift out 8 bits LSB first, on rising edge of clock
   bool pinState;
+  // Set latchPin low to allow data flow
+  digitalWrite(latchPins[bitShifter], LOW);
   // Clear shift register ready for sending data
   digitalWrite(dataPins[bitShifter], LOW);
   digitalWrite(clockPins[bitShifter], LOW);
