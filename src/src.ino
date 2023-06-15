@@ -144,6 +144,8 @@ void setup() {
 
 long currentPitch = 0;
 
+long currentPitch = 0;
+
 // Resets state variables for a fresh game
 void resetGame() {
   score = 0;
