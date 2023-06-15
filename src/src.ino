@@ -111,6 +111,7 @@ long score = 0;
 long scoreAddition = 1;
 int state = 0;
 int difficulty = 0;
+long difficultyAdjustment = 0;
 bool clockwise = true;
 
 long currentLed = 0;
@@ -132,6 +133,8 @@ int scoreResult[4] = {0, 0, 0, 0};
 // Resets state variables for a fresh game
 void resetGame() {
   score = 0;
+  scoreAddition = difficulty + 1;
+  difficultyAdjustment = 0;
   clockwise = true;
 
   currentLed = 0;
@@ -146,8 +149,10 @@ void resetMusic() {
   noteDuration = 0;
   wholenote = (60000 * 4) / tempos[currentTrack];
   currentNote = 0;
+  currentPitch = 0;  
+
   currentTrack++;
-  currentTrack %= 7;
+  currentTrack %= 13;
 }
 
 void advanceGame() {
@@ -156,7 +161,6 @@ void advanceGame() {
 
 // Setup for starting LED screen and pin output.
 void setup() {
-  Serial.begin(9600); // delete this after debugging
   for (int i = 0; i < 4; i++) {
     pinMode(dataPins[i], OUTPUT);
     pinMode(latchPins[i], OUTPUT);
@@ -172,12 +176,9 @@ void setup() {
 
 void playMusic() {
   if (currentTime - musicPlayLR >= noteDuration) {
-    // stop any tones
     noTone(speakerPin);
-    // calculates the duration of each note
     musicDivider = pgm_read_word(&melodies[currentTrack][currentNote + 1]);
     if (musicDivider > 0) {
-      // regular note, just proceed
       noteDuration = (wholenote) / musicDivider;
     } else if (musicDivider < 0) {
       noteDuration = (wholenote) / abs(musicDivider);
@@ -197,14 +198,14 @@ void playMusic() {
   }
 }
 
-// Just generates new values for targets a minimum of 5 leds away.
 void generateTargets(int current) {
   targetLed = random(current + 5, current + 24) % 28;
   if (clockwise) {
-    targetLedS = (targetLed + 1) % 28;
+    targetLedS = targetLed + 1;
   } else {
-    targetLedS = (targetLed + 27) % 28;
+    targetLedS = targetLed + 27;
   }
+  targetLedS %= 28;
 }
 
 // Custom power function that starts from power 1 instead of 0.
@@ -218,7 +219,7 @@ int customPower(int exponent) {
 
 // Returning pointer to array of 4 results used to convert LED positions.
 int* convert(int* leds) {
-  int binary[4][7] = {
+  bool binary[4][7] = {
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
@@ -246,7 +247,7 @@ int* convert(int* leds) {
 
 // Essentially daisy chaining a 28 bit output
 int* scoreConvert(long scoreTemp) {
-  int binary[4][7] = {
+  bool binary[4][7] = {
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
@@ -348,7 +349,7 @@ void gameMain() {
 
 // Game run iteration func
 void gameRun() {
-  if (currentTime - gameRunLR >= speeds[difficulty] - score) {   
+  if (currentTime - gameRunLR >= speeds[difficulty] - difficultyAdjustment * 1.5) {   
     int toConvert[] = {currentLed, targetLed, targetLedS};
     int* converted = convert(toConvert);
 
@@ -376,7 +377,8 @@ void gameRun() {
   if (!lastInteractState && interactState) {
     if (currentLed == targetLed || currentLed == targetLedS) {
       score += scoreAddition;
-      scoreAddition++;
+      scoreAddition += difficulty;
+      difficultyAdjustment++;
       clockwise = !clockwise;
       generateTargets(currentLed);
     } else {
