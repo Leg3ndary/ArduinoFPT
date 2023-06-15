@@ -105,6 +105,7 @@ long currentNote = 0;
 long musicDivider = 0;
 long noteDuration = 0;
 long wholenote = (60000 * 4) / tempos[currentTrack];
+long currentPitch = 0;
 
 long score = 0;
 long scoreAddition = 1;
@@ -124,10 +125,9 @@ byte lastInteractState = LOW;
 
 long gameRunLR = 0;
 long musicPlayLR = 0;
+
 int convertResult[4] = {0, 0, 0, 0};
 int scoreResult[4] = {0, 0, 0, 0};
-
-long currentPitch = 0;
 
 // Resets state variables for a fresh game
 void resetGame() {
