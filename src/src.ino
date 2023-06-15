@@ -129,6 +129,20 @@ long musicPlayLR = 0;
 
 int convertResult[4] = {0, 0, 0, 0};
 int scoreResult[4] = {0, 0, 0, 0};
+// Setup for starting LED screen and pin output.
+void setup() {
+  for (int i = 0; i < 4; i++) {
+    pinMode(dataPins[i], OUTPUT);
+    pinMode(latchPins[i], OUTPUT);
+    pinMode(clockPins[i], OUTPUT);
+  }
+  pinMode(startPin, INPUT);
+  pinMode(interactPin, INPUT);
+  pinMode(speakerPin, OUTPUT);
+
+  randomSeed(analogRead(seedPin));
+  renderDifficulty();
+}
 
 // Resets state variables for a fresh game
 void resetGame() {
@@ -159,25 +173,11 @@ void advanceGame() {
   state++;
 }
 
-// Setup for starting LED screen and pin output.
-void setup() {
-  for (int i = 0; i < 4; i++) {
-    pinMode(dataPins[i], OUTPUT);
-    pinMode(latchPins[i], OUTPUT);
-    pinMode(clockPins[i], OUTPUT);
-  }
-  pinMode(startPin, INPUT);
-  pinMode(interactPin, INPUT);
-  pinMode(speakerPin, OUTPUT);
-
-  randomSeed(analogRead(seedPin));
-  renderDifficulty();
-}
-
 void playMusic() {
   if (currentTime - musicPlayLR >= noteDuration) {
     noTone(speakerPin);
     musicDivider = pgm_read_word(&melodies[currentTrack][currentNote + 1]);
+
     if (musicDivider > 0) {
       noteDuration = (wholenote) / musicDivider;
     } else if (musicDivider < 0) {
@@ -366,7 +366,7 @@ void gameRun() {
 
     if (clockwise && currentLed == (targetLedS + 1) % 28 || !clockwise && currentLed == (targetLedS + 27) % 28) {
       advanceGame();
-      score *= difficulty;
+      score += difficulty;
       displayScore();
       return;
     }
@@ -383,7 +383,7 @@ void gameRun() {
       generateTargets(currentLed);
     } else {
       advanceGame();
-      score *= difficulty;
+      score += difficulty;
       displayScore();
     }
   }
