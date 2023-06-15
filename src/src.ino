@@ -155,26 +155,24 @@ void setup() {
 void playMusic() {
   if (currentTime - musicPlayLR >= noteDuration) {
     // stop any tones
+    noTone(speakerPin);
     // calculates the duration of each note
     musicDivider = pgm_read_word(&melodies[currentTrack][currentNote + 1]);
     if (musicDivider > 0) {
       // regular note, just proceed
       noteDuration = (wholenote) / musicDivider;
     } else if (musicDivider < 0) {
-      // dotted notes are represented with negative durations!!
       noteDuration = (wholenote) / abs(musicDivider);
-      noteDuration *= 1.5; // increases the duration in half for dotted notes
+      noteDuration *= 1.5;
     }
 
     currentPitch = pgm_read_word(&melodies[currentTrack][currentNote]);
 
-    // we only play the note for 90% of the duration, leaving 10% as a pause
     tone(speakerPin, currentPitch, noteDuration * 0.9);
 
     musicPlayLR = currentTime;
     currentNote += 2;
 
-    // we can avoid race conditions since it's single core
     if (currentNote / 2 >= musicNotes[currentTrack]) {
       resetMusic();
     }
