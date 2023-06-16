@@ -35,64 +35,64 @@
 #define F6  1397
 #define REST 0
 
-const int dataPins[4] = {13, 10, 7, 4};
-const int latchPins[4] = {12, 9, 6, 3};
-const int clockPins[4] = {11, 8, 5, 2};
-const int startPin = 14;
-const int interactPin = 15;
-const int seedPin = 18;
-const int speakerPin = 19;
+const long dataPins[4] = {13, 10, 7, 4};
+const long latchPins[4] = {12, 9, 6, 3};
+const long clockPins[4] = {11, 8, 5, 2};
+const long startPin = 14;
+const long longeractPin = 15;
+const long seedPin = 18;
+const long speakerPin = 19;
 
-const int speeds[7] = {150, 120, 95, 75, 60, 50, 40};
+const long speeds[7] = {150, 120, 95, 75, 60, 50, 40};
 
-const PROGMEM int tetrisMelody[] = {E5,4,B4,8,C5,8,D5,4,C5,8,B4,8,A4,4,A4,8,C5,8,E5,4,D5,8,C5,8,B4,-4,C5,8,D5,4,E5,4,C5,4,A4,4,A4,8,A4,4,B4,8,C5,8,D5,-4,F5,8,A5,4,G5,8,F5,8,E5,-4,C5,8,E5,4,D5,8,C5,8,B4,4,B4,8,C5,8,D5,4,E5,4,C5,4,A4,4,A4,4,REST,4,E5,4,B4,8,C5,8,D5,4,C5,8,B4,8,A4,4,A4,8,C5,8,E5,4,D5,8,C5,8,B4,-4,C5,8,D5,4,E5,4,C5,4,A4,4,A4,8,A4,4,B4,8,C5,8,D5,-4,F5,8,A5,4,G5,8,F5,8,E5,-4,C5,8,E5,4,D5,8,C5,8,B4,4,B4,8,C5,8,D5,4,E5,4,C5,4,A4,4,A4,4,REST,4,E5,2,C5,2,D5,2,B4,2,C5,2,A4,2,GS4,2,B4,4,REST,8,E5,2,C5,2,D5,2,B4,2,C5,4,E5,4,A5,2,GS5,2};
-const int tetrisTempo = 144;
+const PROGMEM long tetrisMelody[] = {E5,4,B4,8,C5,8,D5,4,C5,8,B4,8,A4,4,A4,8,C5,8,E5,4,D5,8,C5,8,B4,-4,C5,8,D5,4,E5,4,C5,4,A4,4,A4,8,A4,4,B4,8,C5,8,D5,-4,F5,8,A5,4,G5,8,F5,8,E5,-4,C5,8,E5,4,D5,8,C5,8,B4,4,B4,8,C5,8,D5,4,E5,4,C5,4,A4,4,A4,4,REST,4,E5,4,B4,8,C5,8,D5,4,C5,8,B4,8,A4,4,A4,8,C5,8,E5,4,D5,8,C5,8,B4,-4,C5,8,D5,4,E5,4,C5,4,A4,4,A4,8,A4,4,B4,8,C5,8,D5,-4,F5,8,A5,4,G5,8,F5,8,E5,-4,C5,8,E5,4,D5,8,C5,8,B4,4,B4,8,C5,8,D5,4,E5,4,C5,4,A4,4,A4,4,REST,4,E5,2,C5,2,D5,2,B4,2,C5,2,A4,2,GS4,2,B4,4,REST,8,E5,2,C5,2,D5,2,B4,2,C5,4,E5,4,A5,2,GS5,2};
+const long tetrisTempo = 144;
 
-const PROGMEM int zeldaMelody[] = {AS4,-2,F4,8,F4,8,AS4,8,GS4,16,FS4,16,GS4,-2,AS4,-2,FS4,8,FS4,8,AS4,8,A4,16,G4,16,A4,-2,REST,1,AS4,4,F4,-4,AS4,8,AS4,16,C5,16,D5,16,DS5,16,F5,2,F5,8,F5,8,F5,8,FS5,16,GS5,16,AS5,-2,AS5,8,AS5,8,GS5,8,FS5,16,GS5,-8,FS5,16,F5,2,F5,4,DS5,-8,F5,16,FS5,2,F5,8,DS5,8,CS5,-8,DS5,16,F5,2,DS5,8,CS5,8,C5,-8,D5,16,E5,2,G5,8,F5,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,8,F4,16,F4,8,AS4,4,F4,-4,AS4,8,AS4,16,C5,16,D5,16,DS5,16,F5,2,F5,8,F5,8,F5,8,FS5,16,GS5,16,AS5,-2,CS6,4,C6,4,A5,2,F5,4,FS5,-2,AS5,4,A5,4,F5,2,F5,4,FS5,-2,AS5,4,A5,4,F5,2,D5,4,DS5,-2,FS5,4,F5,4,CS5,2,AS4,4,C5,-8,D5,16,E5,2,G5,8,F5,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,8,F4,16,F4,8};
-const int zeldaTempo = 88;
+const PROGMEM long zeldaMelody[] = {AS4,-2,F4,8,F4,8,AS4,8,GS4,16,FS4,16,GS4,-2,AS4,-2,FS4,8,FS4,8,AS4,8,A4,16,G4,16,A4,-2,REST,1,AS4,4,F4,-4,AS4,8,AS4,16,C5,16,D5,16,DS5,16,F5,2,F5,8,F5,8,F5,8,FS5,16,GS5,16,AS5,-2,AS5,8,AS5,8,GS5,8,FS5,16,GS5,-8,FS5,16,F5,2,F5,4,DS5,-8,F5,16,FS5,2,F5,8,DS5,8,CS5,-8,DS5,16,F5,2,DS5,8,CS5,8,C5,-8,D5,16,E5,2,G5,8,F5,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,8,F4,16,F4,8,AS4,4,F4,-4,AS4,8,AS4,16,C5,16,D5,16,DS5,16,F5,2,F5,8,F5,8,F5,8,FS5,16,GS5,16,AS5,-2,CS6,4,C6,4,A5,2,F5,4,FS5,-2,AS5,4,A5,4,F5,2,F5,4,FS5,-2,AS5,4,A5,4,F5,2,D5,4,DS5,-2,FS5,4,F5,4,CS5,2,AS4,4,C5,-8,D5,16,E5,2,G5,8,F5,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,16,F4,8,F4,16,F4,8};
+const long zeldaTempo = 88;
 
-const PROGMEM int neverGonneGiveYouUpMelody[] = {D5,-4,E5,-4,A4,4,E5,-4,FS5,-4,A5,16,G5,16,FS5,8,D5,-4,E5,-4,A4,2,A4,16,A4,16,B4,16,D5,8,D5,16,D5,-4,E5,-4,A4,4,E5,-4,FS5,-4,A5,16,G5,16,FS5,8,D5,-4,E5,-4,A4,2,A4,16,A4,16,B4,16,D5,8,D5,16,REST,4,B4,8,CS5,8,D5,8,D5,8,E5,8,CS5,-8,B4,16,A4,2,REST,4,REST,8,B4,8,B4,8,CS5,8,D5,8,B4,4,A4,8,A5,8,REST,8,A5,8,E5,-4,REST,4,B4,8,B4,8,CS5,8,D5,8,B4,8,D5,8,E5,8,REST,8,REST,8,CS5,8,B4,8,A4,-4,REST,4,REST,8,B4,8,B4,8,CS5,8,D5,8,B4,8,A4,4,E5,8,E5,8,E5,8,FS5,8,E5,4,REST,4,D5,2,E5,8,FS5,8,D5,8,E5,8,E5,8,E5,8,FS5,8,E5,4,A4,4,REST,2,B4,8,CS5,8,D5,8,B4,8,REST,8,E5,8,FS5,8,E5,-4,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,E5,-8,E5,-8,D5,-8,CS5,16,B4,-8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,8,A4,8,A4,8,E5,4,D5,2,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,A5,4,CS5,8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,REST,4,REST,8,B4,8,D5,8,B4,8,D5,8,E5,4,REST,8,REST,8,CS5,8,B4,8,A4,-4,REST,4,REST,8,B4,8,B4,8,CS5,8,D5,8,B4,8,A4,4,REST,8,A5,8,A5,8,E5,8,FS5,8,E5,8,D5,8,REST,8,A4,8,B4,8,CS5,8,D5,8,B4,8,REST,8,CS5,8,B4,8,A4,-4,REST,4,B4,8,B4,8,CS5,8,D5,8,B4,8,A4,4,REST,8,REST,8,E5,8,E5,8,FS5,4,E5,-4,D5,2,D5,8,E5,8,FS5,8,E5,4,E5,8,E5,8,FS5,8,E5,8,A4,8,A4,4,REST,-4,A4,8,B4,8,CS5,8,D5,8,B4,8,REST,8,E5,8,FS5,8,E5,-4,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,E5,-8,E5,-8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,A5,4,CS5,8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,A5,4,CS5,8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,A5,4,CS5,8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,REST,4};
-const int neverGonnaGiveYouUpTempo = 144;
+const PROGMEM long neverGonneGiveYouUpMelody[] = {D5,-4,E5,-4,A4,4,E5,-4,FS5,-4,A5,16,G5,16,FS5,8,D5,-4,E5,-4,A4,2,A4,16,A4,16,B4,16,D5,8,D5,16,D5,-4,E5,-4,A4,4,E5,-4,FS5,-4,A5,16,G5,16,FS5,8,D5,-4,E5,-4,A4,2,A4,16,A4,16,B4,16,D5,8,D5,16,REST,4,B4,8,CS5,8,D5,8,D5,8,E5,8,CS5,-8,B4,16,A4,2,REST,4,REST,8,B4,8,B4,8,CS5,8,D5,8,B4,4,A4,8,A5,8,REST,8,A5,8,E5,-4,REST,4,B4,8,B4,8,CS5,8,D5,8,B4,8,D5,8,E5,8,REST,8,REST,8,CS5,8,B4,8,A4,-4,REST,4,REST,8,B4,8,B4,8,CS5,8,D5,8,B4,8,A4,4,E5,8,E5,8,E5,8,FS5,8,E5,4,REST,4,D5,2,E5,8,FS5,8,D5,8,E5,8,E5,8,E5,8,FS5,8,E5,4,A4,4,REST,2,B4,8,CS5,8,D5,8,B4,8,REST,8,E5,8,FS5,8,E5,-4,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,E5,-8,E5,-8,D5,-8,CS5,16,B4,-8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,8,A4,8,A4,8,E5,4,D5,2,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,A5,4,CS5,8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,REST,4,REST,8,B4,8,D5,8,B4,8,D5,8,E5,4,REST,8,REST,8,CS5,8,B4,8,A4,-4,REST,4,REST,8,B4,8,B4,8,CS5,8,D5,8,B4,8,A4,4,REST,8,A5,8,A5,8,E5,8,FS5,8,E5,8,D5,8,REST,8,A4,8,B4,8,CS5,8,D5,8,B4,8,REST,8,CS5,8,B4,8,A4,-4,REST,4,B4,8,B4,8,CS5,8,D5,8,B4,8,A4,4,REST,8,REST,8,E5,8,E5,8,FS5,4,E5,-4,D5,2,D5,8,E5,8,FS5,8,E5,4,E5,8,E5,8,FS5,8,E5,8,A4,8,A4,4,REST,-4,A4,8,B4,8,CS5,8,D5,8,B4,8,REST,8,E5,8,FS5,8,E5,-4,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,E5,-8,E5,-8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,A5,4,CS5,8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,A5,4,CS5,8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,A4,16,B4,16,D5,16,B4,16,FS5,-8,FS5,-8,E5,-4,A4,16,B4,16,D5,16,B4,16,A5,4,CS5,8,D5,-8,CS5,16,B4,8,A4,16,B4,16,D5,16,B4,16,D5,4,E5,8,CS5,-8,B4,16,A4,4,A4,8,E5,4,D5,2,REST,4};
+const long neverGonnaGiveYouUpTempo = 144;
 
-const PROGMEM int starWarsMelody[] = {AS4,8,AS4,8,AS4,8,F5,2,C6,2,AS5,8,A5,8,G5,8,F6,2,C6,4,AS5,8,A5,8,G5,8,F6,2,C6,4,AS5,8,A5,8,AS5,8,G5,2,C5,8,C5,8,C5,8,F5,2,C6,2,AS5,8,A5,8,G5,8,F6,2,C6,4,AS5,8,A5,8,G5,8,F6,2,C6,4,AS5,8,A5,8,AS5,8,G5,2,C5,-8,C5,16,D5,-4,D5,8,AS5,8,A5,8,G5,8,F5,8,F5,8,G5,8,A5,8,G5,4,D5,8,E5,4,C5,-8,C5,16,D5,-4,D5,8,AS5,8,A5,8,G5,8,F5,8,C6,-8,G5,16,G5,2,REST,8,C5,8,D5,-4,D5,8,AS5,8,A5,8,G5,8,F5,8,F5,8,G5,8,A5,8,G5,4,D5,8,E5,4,C6,-8,C6,16,F6,4,DS6,8,CS6,4,C6,8,AS5,4,GS5,8,G5,4,F5,8,C6,1};
-const int starWarsTempo = 108;
+const PROGMEM long starWarsMelody[] = {AS4,8,AS4,8,AS4,8,F5,2,C6,2,AS5,8,A5,8,G5,8,F6,2,C6,4,AS5,8,A5,8,G5,8,F6,2,C6,4,AS5,8,A5,8,AS5,8,G5,2,C5,8,C5,8,C5,8,F5,2,C6,2,AS5,8,A5,8,G5,8,F6,2,C6,4,AS5,8,A5,8,G5,8,F6,2,C6,4,AS5,8,A5,8,AS5,8,G5,2,C5,-8,C5,16,D5,-4,D5,8,AS5,8,A5,8,G5,8,F5,8,F5,8,G5,8,A5,8,G5,4,D5,8,E5,4,C5,-8,C5,16,D5,-4,D5,8,AS5,8,A5,8,G5,8,F5,8,C6,-8,G5,16,G5,2,REST,8,C5,8,D5,-4,D5,8,AS5,8,A5,8,G5,8,F5,8,F5,8,G5,8,A5,8,G5,4,D5,8,E5,4,C6,-8,C6,16,F6,4,DS6,8,CS6,4,C6,8,AS5,4,GS5,8,G5,4,F5,8,C6,1};
+const long starWarsTempo = 108;
 
-const PROGMEM int miiChannelMelody[] = {FS4,8,REST,8,A4,8,CS5,8,REST,8,A4,8,REST,8,FS4,8,D4,8,D4,8,D4,8,REST,8,REST,4,REST,8,CS4,8,D4,8,FS4,8,A4,8,CS5,8,REST,8,A4,8,REST,8,F4,8,E5,-4,DS5,8,D5,8,REST,8,REST,4,GS4,8,REST,8,CS5,8,FS4,8,REST,8,CS5,8,REST,8,GS4,8,REST,8,CS5,8,G4,8,FS4,8,REST,8,E4,8,REST,8,E4,8,E4,8,E4,8,REST,8,REST,4,E4,8,E4,8,E4,8,REST,8,REST,4,DS4,8,D4,8,CS4,8,REST,8,A4,8,CS5,8,REST,8,A4,8,REST,8,FS4,8,D4,8,D4,8,D4,8,REST,8,E5,8,E5,8,E5,8,REST,8,REST,8,FS4,8,A4,8,CS5,8,REST,8,A4,8,REST,8,F4,8,E5,2,D5,8,REST,8,REST,4,B4,8,G4,8,D4,8,CS4,4,B4,8,G4,8,CS4,8,A4,8,FS4,8,C4,8,B3,4,F4,8,D4,8,B3,8,E4,8,E4,8,E4,8,REST,4,REST,4,AS4,4,CS5,8,D5,8,FS5,8,A5,8,REST,8,REST,4,REST,2,A3,4,AS3,4,A3,-4,A3,8,A3,2,REST,4,A3,8,AS3,8,A3,8,F4,4,C4,8,A3,-4,A3,8,A3,2,REST,2,B3,4,C4,4,CS4,-4,C4,8,CS4,2,REST,4,CS4,8,C4,8,CS4,8,GS4,4,DS4,8,CS4,-4,DS4,8,B3,1,E4,4,E4,4,E4,4,REST,8,FS4,8,REST,8,A4,8,CS5,8,REST,8,A4,8,REST,8,FS4,8,D4,8,D4,8,D4,8,REST,8,REST,4,REST,8,CS4,8,D4,8,FS4,8,A4,8,CS5,8,REST,8,A4,8,REST,8,F4,8,E5,-4,DS5,8,D5,8,REST,8,REST,4,GS4,8,REST,8,CS5,8,FS4,8,REST,8,CS5,8,REST,8,GS4,8,REST,8,CS5,8,G4,8,FS4,8,REST,8,E4,8,REST,8,E4,8,E4,8,E4,8,REST,8,REST,4,E4,8,E4,8,E4,8,REST,8,REST,4,DS4,8,D4,8,CS4,8,REST,8,A4,8,CS5,8,REST,8,A4,8,REST,8,FS4,8,D4,8,D4,8,D4,8,REST,8,E5,8,E5,8,E5,8,REST,8,REST,8,FS4,8,A4,8,CS5,8,REST,8,A4,8,REST,8,F4,8,E5,2,D5,8,REST,8,REST,4,B4,8,G4,8,D4,8,CS4,4,B4,8,G4,8,CS4,8,A4,8,FS4,8,C4,8,B3,4,F4,8,D4,8,B3,8,E4,8,E4,8,E4,8,REST,4,REST,4,AS4,4,CS5,8,D5,8,FS5,8,A5,8,REST,8,REST,4,REST,2,A3,4,AS3,4,A3,-4,A3,8,A3,2,REST,4,A3,8,AS3,8,A3,8,F4,4,C4,8,A3,-4,A3,8,A3,2,REST,2,B3,4,C4,4,CS4,-4,C4,8,CS4,2,REST,4,CS4,8,C4,8,CS4,8,GS4,4,DS4,8,CS4,-4,DS4,8,B3,1,E4,4,E4,4,E4,4,REST,8};
-const int miiChannelTempo = 114;
+const PROGMEM long miiChannelMelody[] = {FS4,8,REST,8,A4,8,CS5,8,REST,8,A4,8,REST,8,FS4,8,D4,8,D4,8,D4,8,REST,8,REST,4,REST,8,CS4,8,D4,8,FS4,8,A4,8,CS5,8,REST,8,A4,8,REST,8,F4,8,E5,-4,DS5,8,D5,8,REST,8,REST,4,GS4,8,REST,8,CS5,8,FS4,8,REST,8,CS5,8,REST,8,GS4,8,REST,8,CS5,8,G4,8,FS4,8,REST,8,E4,8,REST,8,E4,8,E4,8,E4,8,REST,8,REST,4,E4,8,E4,8,E4,8,REST,8,REST,4,DS4,8,D4,8,CS4,8,REST,8,A4,8,CS5,8,REST,8,A4,8,REST,8,FS4,8,D4,8,D4,8,D4,8,REST,8,E5,8,E5,8,E5,8,REST,8,REST,8,FS4,8,A4,8,CS5,8,REST,8,A4,8,REST,8,F4,8,E5,2,D5,8,REST,8,REST,4,B4,8,G4,8,D4,8,CS4,4,B4,8,G4,8,CS4,8,A4,8,FS4,8,C4,8,B3,4,F4,8,D4,8,B3,8,E4,8,E4,8,E4,8,REST,4,REST,4,AS4,4,CS5,8,D5,8,FS5,8,A5,8,REST,8,REST,4,REST,2,A3,4,AS3,4,A3,-4,A3,8,A3,2,REST,4,A3,8,AS3,8,A3,8,F4,4,C4,8,A3,-4,A3,8,A3,2,REST,2,B3,4,C4,4,CS4,-4,C4,8,CS4,2,REST,4,CS4,8,C4,8,CS4,8,GS4,4,DS4,8,CS4,-4,DS4,8,B3,1,E4,4,E4,4,E4,4,REST,8,FS4,8,REST,8,A4,8,CS5,8,REST,8,A4,8,REST,8,FS4,8,D4,8,D4,8,D4,8,REST,8,REST,4,REST,8,CS4,8,D4,8,FS4,8,A4,8,CS5,8,REST,8,A4,8,REST,8,F4,8,E5,-4,DS5,8,D5,8,REST,8,REST,4,GS4,8,REST,8,CS5,8,FS4,8,REST,8,CS5,8,REST,8,GS4,8,REST,8,CS5,8,G4,8,FS4,8,REST,8,E4,8,REST,8,E4,8,E4,8,E4,8,REST,8,REST,4,E4,8,E4,8,E4,8,REST,8,REST,4,DS4,8,D4,8,CS4,8,REST,8,A4,8,CS5,8,REST,8,A4,8,REST,8,FS4,8,D4,8,D4,8,D4,8,REST,8,E5,8,E5,8,E5,8,REST,8,REST,8,FS4,8,A4,8,CS5,8,REST,8,A4,8,REST,8,F4,8,E5,2,D5,8,REST,8,REST,4,B4,8,G4,8,D4,8,CS4,4,B4,8,G4,8,CS4,8,A4,8,FS4,8,C4,8,B3,4,F4,8,D4,8,B3,8,E4,8,E4,8,E4,8,REST,4,REST,4,AS4,4,CS5,8,D5,8,FS5,8,A5,8,REST,8,REST,4,REST,2,A3,4,AS3,4,A3,-4,A3,8,A3,2,REST,4,A3,8,AS3,8,A3,8,F4,4,C4,8,A3,-4,A3,8,A3,2,REST,2,B3,4,C4,4,CS4,-4,C4,8,CS4,2,REST,4,CS4,8,C4,8,CS4,8,GS4,4,DS4,8,CS4,-4,DS4,8,B3,1,E4,4,E4,4,E4,4,REST,8};
+const long miiChannelTempo = 114;
 
-const PROGMEM int canonInDMelody[] = {FS4,2,E4,2,D4,2,CS4,2,B3,2,A3,2,B3,2,CS4,2,FS4,2,E4,2,D4,2,CS4,2,B3,2,A3,2,B3,2,CS4,2,D4,2,CS4,2,B3,2,A3,2,G3,2,FS3,2,G3,2,A3,2,D4,4,FS4,8,G4,8,A4,4,FS4,8,G4,8,A4,4,B3,8,CS4,8,D4,8,E4,8,FS4,8,G4,8,FS4,4,D4,8,E4,8,FS4,4,FS3,8,G3,8,A3,8,G3,8,FS3,8,G3,8,A3,2,G3,4,B3,8,A3,8,G3,4,FS3,8,E3,8,FS3,4,D3,8,E3,8,FS3,8,G3,8,A3,8,B3,8,G3,4,B3,8,A3,8,B3,4,CS4,8,D4,8,A3,8,B3,8,CS4,8,D4,8,E4,8,FS4,8,G4,8,A4,2,A4,4,FS4,8,G4,8,A4,4,FS4,8,G4,8,A4,8,A3,8,B3,8,CS4,8,D4,8,E4,8,FS4,8,G4,8,FS4,4,D4,8,E4,8,FS4,8,CS4,8,A3,8,A3,8,CS4,4,B3,4,D4,8,CS4,8,B3,4,A3,8,G3,8,A3,4,D3,8,E3,8,FS3,8,G3,8,A3,8,B3,4,G3,4,B3,8,A3,8,B3,4,CS4,8,D4,8,A3,8,B3,8,CS4,8,D4,8,E4,8,FS4,8,G4,8,A4,2};
-const int canonInDTempo = 150;
+const PROGMEM long canonInDMelody[] = {FS4,2,E4,2,D4,2,CS4,2,B3,2,A3,2,B3,2,CS4,2,FS4,2,E4,2,D4,2,CS4,2,B3,2,A3,2,B3,2,CS4,2,D4,2,CS4,2,B3,2,A3,2,G3,2,FS3,2,G3,2,A3,2,D4,4,FS4,8,G4,8,A4,4,FS4,8,G4,8,A4,4,B3,8,CS4,8,D4,8,E4,8,FS4,8,G4,8,FS4,4,D4,8,E4,8,FS4,4,FS3,8,G3,8,A3,8,G3,8,FS3,8,G3,8,A3,2,G3,4,B3,8,A3,8,G3,4,FS3,8,E3,8,FS3,4,D3,8,E3,8,FS3,8,G3,8,A3,8,B3,8,G3,4,B3,8,A3,8,B3,4,CS4,8,D4,8,A3,8,B3,8,CS4,8,D4,8,E4,8,FS4,8,G4,8,A4,2,A4,4,FS4,8,G4,8,A4,4,FS4,8,G4,8,A4,8,A3,8,B3,8,CS4,8,D4,8,E4,8,FS4,8,G4,8,FS4,4,D4,8,E4,8,FS4,8,CS4,8,A3,8,A3,8,CS4,4,B3,4,D4,8,CS4,8,B3,4,A3,8,G3,8,A3,4,D3,8,E3,8,FS3,8,G3,8,A3,8,B3,4,G3,4,B3,8,A3,8,B3,4,CS4,8,D4,8,A3,8,B3,8,CS4,8,D4,8,E4,8,FS4,8,G4,8,A4,2};
+const long canonInDTempo = 150;
 
-const PROGMEM int minuetInGMelody[] = {D5,4,G4,8,A4,8,B4,8,C5,8,D5,4,G4,4,G4,4,E5,4,C5,8,D5,8,E5,8,FS5,8,G5,4,G4,4,G4,4,C5,4,D5,8,C5,8,B4,8,A4,8,B4,4,C5,8,B4,8,A4,8,G4,8,FS4,4,G4,8,A4,8,B4,8,G4,8,A4,-2,D5,4,G4,8,A4,8,B4,8,C5,8,D5,4,G4,4,G4,4,E5,4,C5,8,D5,8,E5,8,FS5,8,G5,4,G4,4,G4,4,C5,4,D5,8,C5,8,B4,8,A4,8,B4,4,C5,8,B4,8,A4,8,G4,8,A4,4,B4,8,A4,8,G4,8,FS4,8,G4,-2,D5,4,G4,8,A4,8,B4,8,C5,8,D5,4,G4,4,G4,4,E5,4,C5,8,D5,8,E5,8,FS5,8,G5,4,G4,4,G4,4,C5,4,D5,8,C5,8,B4,8,A4,8,B4,4,C5,8,B4,8,A4,8,G4,8,FS4,4,G4,8,A4,8,B4,8,G4,8,A4,-2,D5,4,G4,8,A4,8,B4,8,C5,8,D5,4,G4,4,G4,4,E5,4,C5,8,D5,8,E5,8,FS5,8,G5,4,G4,4,G4,4,C5,4,D5,8,C5,8,B4,8,A4,8,B4,4,C5,8,B4,8,A4,8,G4,8,A4,4,B4,8,A4,8,G4,8,FS4,8,G4,-2,B5,4,G5,8,A5,8,B5,8,G5,8,A5,4,D5,8,E5,8,FS5,8,D5,8,G5,4,E5,8,FS5,8,G5,8,D5,8,CS5,4,B4,8,CS5,8,A4,4,A4,8,B4,8,CS5,8,D5,8,E5,8,FS5,8,G5,4,FS5,4,E5,4,FS5,4,A4,4,CS5,4,D5,-2,D5,4,G4,8,FS5,8,G4,4,E5,4,G4,8,FS4,8,G4,4,D5,4,C5,4,B4,4,A4,8,G4,8,FS4,8,G4,8,A4,4,D4,8,E4,8,FS4,8,G4,8,A4,8,B4,8,C5,4,B4,4,A4,4,B4,8,D5,8,G4,4,FS4,4,G4,-2};
-const int minuetInDTempo = 140;
+const PROGMEM long minuetInGMelody[] = {D5,4,G4,8,A4,8,B4,8,C5,8,D5,4,G4,4,G4,4,E5,4,C5,8,D5,8,E5,8,FS5,8,G5,4,G4,4,G4,4,C5,4,D5,8,C5,8,B4,8,A4,8,B4,4,C5,8,B4,8,A4,8,G4,8,FS4,4,G4,8,A4,8,B4,8,G4,8,A4,-2,D5,4,G4,8,A4,8,B4,8,C5,8,D5,4,G4,4,G4,4,E5,4,C5,8,D5,8,E5,8,FS5,8,G5,4,G4,4,G4,4,C5,4,D5,8,C5,8,B4,8,A4,8,B4,4,C5,8,B4,8,A4,8,G4,8,A4,4,B4,8,A4,8,G4,8,FS4,8,G4,-2,D5,4,G4,8,A4,8,B4,8,C5,8,D5,4,G4,4,G4,4,E5,4,C5,8,D5,8,E5,8,FS5,8,G5,4,G4,4,G4,4,C5,4,D5,8,C5,8,B4,8,A4,8,B4,4,C5,8,B4,8,A4,8,G4,8,FS4,4,G4,8,A4,8,B4,8,G4,8,A4,-2,D5,4,G4,8,A4,8,B4,8,C5,8,D5,4,G4,4,G4,4,E5,4,C5,8,D5,8,E5,8,FS5,8,G5,4,G4,4,G4,4,C5,4,D5,8,C5,8,B4,8,A4,8,B4,4,C5,8,B4,8,A4,8,G4,8,A4,4,B4,8,A4,8,G4,8,FS4,8,G4,-2,B5,4,G5,8,A5,8,B5,8,G5,8,A5,4,D5,8,E5,8,FS5,8,D5,8,G5,4,E5,8,FS5,8,G5,8,D5,8,CS5,4,B4,8,CS5,8,A4,4,A4,8,B4,8,CS5,8,D5,8,E5,8,FS5,8,G5,4,FS5,4,E5,4,FS5,4,A4,4,CS5,4,D5,-2,D5,4,G4,8,FS5,8,G4,4,E5,4,G4,8,FS4,8,G4,4,D5,4,C5,4,B4,4,A4,8,G4,8,FS4,8,G4,8,A4,4,D4,8,E4,8,FS4,8,G4,8,A4,8,B4,8,C5,4,B4,4,A4,4,B4,8,D5,8,G4,4,FS4,4,G4,-2};
+const long minuetInDTempo = 140;
 // hello there
-const PROGMEM int brahmsLullabyMelody[] = {G4,4,G4,4,AS4,-4,G4,8,G4,4,AS4,4,REST,4,G4,8,AS4,8,DS5,4,D5,-4,C5,8,C5,4,AS4,4,F4,8,G4,8,GS4,4,F4,4,F4,8,G4,8,GS4,4,REST,4,F4,8,GS4,8,D5,8,C5,8,AS4,4,D5,4,DS5,4,REST,4,DS4,8,DS4,8,DS5,2,C5,8,GS4,8,AS4,2,G4,8,DS4,8,GS4,4,AS4,4,C5,4,AS4,2,DS4,8,DS4,8,DS5,2,C5,8,GS4,8,AS4,2,G4,8,DS4,8,AS4,4,G4,4,DS4,4,DS4,2};
-const int brahmsLullabyTempo = 80;
+const PROGMEM long brahmsLullabyMelody[] = {G4,4,G4,4,AS4,-4,G4,8,G4,4,AS4,4,REST,4,G4,8,AS4,8,DS5,4,D5,-4,C5,8,C5,4,AS4,4,F4,8,G4,8,GS4,4,F4,4,F4,8,G4,8,GS4,4,REST,4,F4,8,GS4,8,D5,8,C5,8,AS4,4,D5,4,DS5,4,REST,4,DS4,8,DS4,8,DS5,2,C5,8,GS4,8,AS4,2,G4,8,DS4,8,GS4,4,AS4,4,C5,4,AS4,2,DS4,8,DS4,8,DS5,2,C5,8,GS4,8,AS4,2,G4,8,DS4,8,AS4,4,G4,4,DS4,4,DS4,2};
+const long brahmsLullabyTempo = 80;
 
-const PROGMEM int harryPotterMelody[] = {REST,2,D4,4,G4,-4,AS4,8,A4,4,G4,2,D5,4,C5,-2,A4,-2,G4,-4,AS4,8,A4,4,F4,2,GS4,4,D4,-1,D4,4,G4,-4,AS4,8,A4,4,G4,2,D5,4,F5,2,E5,4,DS5,2,B4,4,DS5,-4,D5,8,CS5,4,CS4,2,B4,4,G4,-1,AS4,4,D5,2,AS4,4,D5,2,AS4,4,DS5,2,D5,4,CS5,2,A4,4,AS4,-4,D5,8,CS5,4,CS4,2,D4,4,D5,-1,REST,4,AS4,4,D5,2,AS4,4,D5,2,AS4,4,F5,2,E5,4,DS5,2,B4,4,DS5,-4,D5,8,CS5,4,CS4,2,AS4,4,G4,-1};
-const int harryPotterTempo = 144;
+const PROGMEM long harryPotterMelody[] = {REST,2,D4,4,G4,-4,AS4,8,A4,4,G4,2,D5,4,C5,-2,A4,-2,G4,-4,AS4,8,A4,4,F4,2,GS4,4,D4,-1,D4,4,G4,-4,AS4,8,A4,4,G4,2,D5,4,F5,2,E5,4,DS5,2,B4,4,DS5,-4,D5,8,CS5,4,CS4,2,B4,4,G4,-1,AS4,4,D5,2,AS4,4,D5,2,AS4,4,DS5,2,D5,4,CS5,2,A4,4,AS4,-4,D5,8,CS5,4,CS4,2,D4,4,D5,-1,REST,4,AS4,4,D5,2,AS4,4,D5,2,AS4,4,F5,2,E5,4,DS5,2,B4,4,DS5,-4,D5,8,CS5,4,CS4,2,AS4,4,G4,-1};
+const long harryPotterTempo = 144;
 
-const PROGMEM int merryChristmasMelody[] = {C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,4,F5,4,E5,2,E5,4,F5,4,E5,4,D5,4,C5,2,A5,4,AS5,4,A5,4,G5,4,C6,4,C5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,4,F5,4,E5,2,E5,4,F5,4,E5,4,D5,4,C5,2,A5,4,AS5,4,A5,4,G5,4,C6,4,C5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,REST,4};
-const int merryChristmasTempo = 140;
+const PROGMEM long merryChristmasMelody[] = {C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,4,F5,4,E5,2,E5,4,F5,4,E5,4,D5,4,C5,2,A5,4,AS5,4,A5,4,G5,4,C6,4,C5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,4,F5,4,E5,2,E5,4,F5,4,E5,4,D5,4,C5,2,A5,4,AS5,4,A5,4,G5,4,C6,4,C5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,C5,4,F5,4,F5,8,G5,8,F5,8,E5,8,D5,4,D5,4,D5,4,G5,4,G5,8,A5,8,G5,8,F5,8,E5,4,C5,4,C5,4,A5,4,A5,8,AS5,8,A5,8,G5,8,F5,4,D5,4,C5,8,C5,8,D5,4,G5,4,E5,4,F5,2,REST,4};
+const long merryChristmasTempo = 140;
 
-const PROGMEM int silentNightMelody[] = {G4,-4,A4,8,G4,4,E4,-2,G4,-4,A4,8,G4,4,E4,-2,D5,2,D5,4,B4,-2,C5,2,C5,4,G4,-2,A4,2,A4,4,C5,-4,B4,8,A4,4,G4,-4,A4,8,G4,4,E4,-2,A4,2,A4,4,C5,-4,B4,8,A4,4,G4,-4,A4,8,G4,4,E4,-2,D5,2,D5,4,F5,-4,D5,8,B4,4,C5,-2,E5,-2,C5,4,G4,4,E4,4,G4,-4,F4,8,D4,4,C4,-2,C4,-1};
-const int silentNightTempo = 140;
+const PROGMEM long silentNightMelody[] = {G4,-4,A4,8,G4,4,E4,-2,G4,-4,A4,8,G4,4,E4,-2,D5,2,D5,4,B4,-2,C5,2,C5,4,G4,-2,A4,2,A4,4,C5,-4,B4,8,A4,4,G4,-4,A4,8,G4,4,E4,-2,A4,2,A4,4,C5,-4,B4,8,A4,4,G4,-4,A4,8,G4,4,E4,-2,D5,2,D5,4,F5,-4,D5,8,B4,4,C5,-2,E5,-2,C5,4,G4,4,E4,4,G4,-4,F4,8,D4,4,C4,-2,C4,-1};
+const long silentNightTempo = 140;
 
-const PROGMEM int superMarioBrosMelody[] = {E5,8,E5,8,REST,8,E5,8,REST,8,C5,8,E5,8,G5,4,REST,4,G4,8,REST,4,C5,-4,G4,8,REST,4,E4,-4,A4,4,B4,4,AS4,8,A4,4,G4,-8,E5,-8,G5,-8,A5,4,F5,8,G5,8,REST,8,E5,4,C5,8,D5,8,B4,-4,C5,-4,G4,8,REST,4,E4,-4,A4,4,B4,4,AS4,8,A4,4,G4,-8,E5,-8,G5,-8,A5,4,F5,8,G5,8,REST,8,E5,4,C5,8,D5,8,B4,-4,REST,4,G5,8,FS5,8,F5,8,DS5,4,E5,8,REST,8,GS4,8,A4,8,C4,8,REST,8,A4,8,C5,8,D5,8,REST,4,DS5,4,REST,8,D5,-4,C5,2,REST,2,REST,4,G5,8,FS5,8,F5,8,DS5,4,E5,8,REST,8,GS4,8,A4,8,C4,8,REST,8,A4,8,C5,8,D5,8,REST,4,DS5,4,REST,8,D5,-4,C5,2,REST,2,C5,8,C5,4,C5,8,REST,8,C5,8,D5,4,E5,8,C5,4,A4,8,G4,2,C5,8,C5,4,C5,8,REST,8,C5,8,D5,8,E5,8,REST,1,C5,8,C5,4,C5,8,REST,8,C5,8,D5,4,E5,8,C5,4,A4,8,G4,2,E5,8,E5,8,REST,8,E5,8,REST,8,C5,8,E5,4,G5,4,REST,4,G4,4,REST,4,C5,-4,G4,8,REST,4,E4,-4,A4,4,B4,4,AS4,8,A4,4,G4,-8,E5,-8,G5,-8,A5,4,F5,8,G5,8,REST,8,E5,4,C5,8,D5,8,B4,-4,C5,-4,G4,8,REST,4,E4,-4,A4,4,B4,4,AS4,8,A4,4,G4,-8,E5,-8,G5,-8,A5,4,F5,8,G5,8,REST,8,E5,4,C5,8,D5,8,B4,-4,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,D5,-8,A5,-8,A5,-8,A5,-8,G5,-8,F5,-8,E5,8,C5,4,A4,8,G4,2,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,B4,8,F5,4,F5,8,F5,-8,E5,-8,D5,-8,C5,8,E4,4,E4,8,C4,2,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,D5,-8,A5,-8,A5,-8,A5,-8,G5,-8,F5,-8,E5,8,C5,4,A4,8,G4,2,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,B4,8,F5,4,F5,8,F5,-8,E5,-8,D5,-8,C5,8,E4,4,E4,8,C4,2,C5,8,C5,4,C5,8,REST,8,C5,8,D5,8,E5,8,REST,1,C5,8,C5,4,C5,8,REST,8,C5,8,D5,4,E5,8,C5,4,A4,8,G4,2,E5,8,E5,8,REST,8,E5,8,REST,8,C5,8,E5,4,G5,4,REST,4,G4,4,REST,4,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,D5,-8,A5,-8,A5,-8,A5,-8,G5,-8,F5,-8,E5,8,C5,4,A4,8,G4,2,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,B4,8,F5,4,F5,8,F5,-8,E5,-8,D5,-8,C5,8,E4,4,E4,8,C4,2,C5,-4,G4,-4,E4,4,A4,-8,B4,-8,A4,-8,GS4,-8,AS4,-8,GS4,-8,G4,8,D4,8,E4,-2};
-const int superMarioBrosTempo = 200;
+const PROGMEM long superMarioBrosMelody[] = {E5,8,E5,8,REST,8,E5,8,REST,8,C5,8,E5,8,G5,4,REST,4,G4,8,REST,4,C5,-4,G4,8,REST,4,E4,-4,A4,4,B4,4,AS4,8,A4,4,G4,-8,E5,-8,G5,-8,A5,4,F5,8,G5,8,REST,8,E5,4,C5,8,D5,8,B4,-4,C5,-4,G4,8,REST,4,E4,-4,A4,4,B4,4,AS4,8,A4,4,G4,-8,E5,-8,G5,-8,A5,4,F5,8,G5,8,REST,8,E5,4,C5,8,D5,8,B4,-4,REST,4,G5,8,FS5,8,F5,8,DS5,4,E5,8,REST,8,GS4,8,A4,8,C4,8,REST,8,A4,8,C5,8,D5,8,REST,4,DS5,4,REST,8,D5,-4,C5,2,REST,2,REST,4,G5,8,FS5,8,F5,8,DS5,4,E5,8,REST,8,GS4,8,A4,8,C4,8,REST,8,A4,8,C5,8,D5,8,REST,4,DS5,4,REST,8,D5,-4,C5,2,REST,2,C5,8,C5,4,C5,8,REST,8,C5,8,D5,4,E5,8,C5,4,A4,8,G4,2,C5,8,C5,4,C5,8,REST,8,C5,8,D5,8,E5,8,REST,1,C5,8,C5,4,C5,8,REST,8,C5,8,D5,4,E5,8,C5,4,A4,8,G4,2,E5,8,E5,8,REST,8,E5,8,REST,8,C5,8,E5,4,G5,4,REST,4,G4,4,REST,4,C5,-4,G4,8,REST,4,E4,-4,A4,4,B4,4,AS4,8,A4,4,G4,-8,E5,-8,G5,-8,A5,4,F5,8,G5,8,REST,8,E5,4,C5,8,D5,8,B4,-4,C5,-4,G4,8,REST,4,E4,-4,A4,4,B4,4,AS4,8,A4,4,G4,-8,E5,-8,G5,-8,A5,4,F5,8,G5,8,REST,8,E5,4,C5,8,D5,8,B4,-4,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,D5,-8,A5,-8,A5,-8,A5,-8,G5,-8,F5,-8,E5,8,C5,4,A4,8,G4,2,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,B4,8,F5,4,F5,8,F5,-8,E5,-8,D5,-8,C5,8,E4,4,E4,8,C4,2,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,D5,-8,A5,-8,A5,-8,A5,-8,G5,-8,F5,-8,E5,8,C5,4,A4,8,G4,2,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,B4,8,F5,4,F5,8,F5,-8,E5,-8,D5,-8,C5,8,E4,4,E4,8,C4,2,C5,8,C5,4,C5,8,REST,8,C5,8,D5,8,E5,8,REST,1,C5,8,C5,4,C5,8,REST,8,C5,8,D5,4,E5,8,C5,4,A4,8,G4,2,E5,8,E5,8,REST,8,E5,8,REST,8,C5,8,E5,4,G5,4,REST,4,G4,4,REST,4,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,D5,-8,A5,-8,A5,-8,A5,-8,G5,-8,F5,-8,E5,8,C5,4,A4,8,G4,2,E5,8,C5,4,G4,8,REST,4,GS4,4,A4,8,F5,4,F5,8,A4,2,B4,8,F5,4,F5,8,F5,-8,E5,-8,D5,-8,C5,8,E4,4,E4,8,C4,2,C5,-4,G4,-4,E4,4,A4,-8,B4,-8,A4,-8,GS4,-8,AS4,-8,GS4,-8,G4,8,D4,8,E4,-2};
+const long superMarioBrosTempo = 200;
 
-const PROGMEM int takeOnMeMelody[] = {FS5,8,FS5,8,D5,8,B4,8,REST,8,B4,8,REST,8,E5,8,REST,8,E5,8,REST,8,E5,8,GS5,8,GS5,8,A5,8,B5,8,A5,8,A5,8,A5,8,E5,8,REST,8,D5,8,REST,8,FS5,8,REST,8,FS5,8,REST,8,FS5,8,E5,8,E5,8,FS5,8,E5,8,FS5,8,FS5,8,D5,8,B4,8,REST,8,B4,8,REST,8,E5,8,REST,8,E5,8,REST,8,E5,8,GS5,8,GS5,8,A5,8,B5,8,A5,8,A5,8,A5,8,E5,8,REST,8,D5,8,REST,8,FS5,8,REST,8,FS5,8,REST,8,FS5,8,E5,8,E5,8,FS5,8,E5,8,FS5,8,FS5,8,D5,8,B4,8,REST,8,B4,8,REST,8,E5,8,REST,8,E5,8,REST,8,E5,8,GS5,8,GS5,8,A5,8,B5,8,A5,8,A5,8,A5,8,E5,8,REST,8,D5,8,REST,8,FS5,8,REST,8,FS5,8,REST,8,FS5,8,E5,8,E5,8,FS5,8,E5,8};
-const int takeOnMeTempo = 140;
+const PROGMEM long takeOnMeMelody[] = {FS5,8,FS5,8,D5,8,B4,8,REST,8,B4,8,REST,8,E5,8,REST,8,E5,8,REST,8,E5,8,GS5,8,GS5,8,A5,8,B5,8,A5,8,A5,8,A5,8,E5,8,REST,8,D5,8,REST,8,FS5,8,REST,8,FS5,8,REST,8,FS5,8,E5,8,E5,8,FS5,8,E5,8,FS5,8,FS5,8,D5,8,B4,8,REST,8,B4,8,REST,8,E5,8,REST,8,E5,8,REST,8,E5,8,GS5,8,GS5,8,A5,8,B5,8,A5,8,A5,8,A5,8,E5,8,REST,8,D5,8,REST,8,FS5,8,REST,8,FS5,8,REST,8,FS5,8,E5,8,E5,8,FS5,8,E5,8,FS5,8,FS5,8,D5,8,B4,8,REST,8,B4,8,REST,8,E5,8,REST,8,E5,8,REST,8,E5,8,GS5,8,GS5,8,A5,8,B5,8,A5,8,A5,8,A5,8,E5,8,REST,8,D5,8,REST,8,FS5,8,REST,8,FS5,8,REST,8,FS5,8,E5,8,E5,8,FS5,8,E5,8};
+const long takeOnMeTempo = 140;
 
-const int* melodies[] = {
+const long* melodies[] = {
   tetrisMelody, zeldaMelody, neverGonneGiveYouUpMelody, starWarsMelody, miiChannelMelody, canonInDMelody, minuetInGMelody, brahmsLullabyMelody, harryPotterMelody, merryChristmasMelody, silentNightMelody, superMarioBrosMelody, takeOnMeMelody
 };
-const int tempos[] = {
+const long tempos[] = {
   tetrisTempo, zeldaTempo, neverGonnaGiveYouUpTempo, starWarsTempo, miiChannelTempo, canonInDTempo, minuetInDTempo, brahmsLullabyTempo, harryPotterTempo, merryChristmasTempo, silentNightTempo, superMarioBrosTempo, takeOnMeTempo
 };
-const int musicNotes[] = {99, 110, 311, 88, 286, 124, 190, 54, 62, 195, 47, 312, 96};
+const long musicNotes[] = {99, 110, 311, 88, 286, 124, 190, 54, 62, 195, 47, 312, 96};
 
-int currentTrack = 0;
+long currentTrack = 0;
 long currentNote = 0;
 long musicDivider = 0;
 long noteDuration = 0;
@@ -101,8 +101,8 @@ long currentPitch = 0;
 
 long score = 0;
 long scoreAddition = 1;
-int state = 0;
-int difficulty = 0;
+long state = 0;
+long difficulty = 0;
 long difficultyAdjustment = 0;
 bool clockwise = true;
 
@@ -113,13 +113,13 @@ long targetLedS = targetLed + 1;
 
 byte startState = LOW;
 byte lastStartState = LOW;
-byte interactState = LOW;
-byte lastInteractState = LOW;
+byte longeractState = LOW;
+byte lastlongeractState = LOW;
 
 long gameRunLR = 0;
 long musicPlayLR = 0;
-int convertResult[4] = {0, 0, 0, 0};
-int scoreResult[4] = {0, 0, 0, 0};
+long convertResult[4] = {0, 0, 0, 0};
+long scoreResult[4] = {0, 0, 0, 0};
 
 void setup() {
   for (int i = 0; i < 4; i++) {
@@ -128,7 +128,7 @@ void setup() {
     pinMode(clockPins[i], OUTPUT);
   }
   pinMode(startPin, INPUT);
-  pinMode(interactPin, INPUT);
+  pinMode(longeractPin, INPUT);
   pinMode(speakerPin, OUTPUT);
 
   randomSeed(analogRead(seedPin));
@@ -187,25 +187,24 @@ void playMusic() {
   }
 }
 
-void generateTargets(int current) {
+void generateTargets(long current) {
   targetLed = random(current + 5, current + 24) % 28;
   if (clockwise) {
-    targetLedS = targetLed + 1;
+    targetLedS = (targetLed + 1) % 28;
   } else {
-    targetLedS = targetLed + 27;
+    targetLedS = (targetLed + 27) % 28;
   }
-  targetLedS %= 28;
 }
 
-int customPower(int exponent) {
-  int result = 2;
+long customPower(long exponent) {
+  long result = 2;
   for (int i = 0; i < exponent; i++) {
     result *= 2;
   }
   return result;
 }
 
-int* convert(int* leds) {
+long* convert(long* leds) {
   bool binary[4][7] = {
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
@@ -213,15 +212,15 @@ int* convert(int* leds) {
     {0, 0, 0, 0, 0, 0, 0},
   };
 
-  for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]) + 2; i++) {
-    int bitShifter = leds[i] / 7;
-    int bit = leds[i] % 7;
+  for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]) + 3; i++) {
+    long bitShifter = leds[i] / 7;
+    long bit = leds[i] % 7;
     binary[bitShifter][bit] = 1;
   }
 
   for (int i = 0; i < 4; i++) {
-    int decimal = 255;
-    for (int j = 0 ; j < 7 ; j++) {
+    long decimal = 255;
+    for (long j = 0 ; j < 7 ; j++) {
       if (binary[i][j] == 0) {
         decimal -= customPower(6 - j);
       }
@@ -232,7 +231,7 @@ int* convert(int* leds) {
   return convertResult;
 }
 
-int* scoreConvert(long scoreTemp) {
+long* scoreConvert(long scoreTemp) {
   bool binary[4][7] = {
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
@@ -240,8 +239,8 @@ int* scoreConvert(long scoreTemp) {
     {0, 0, 0, 0, 0, 0, 0},
   };
 
-  int arr[24];
-  int counter = 0;
+  long arr[24];
+  long counter = 0;
 
   while (scoreTemp != 0) {
 		arr[counter] = scoreTemp % 2;
@@ -251,15 +250,15 @@ int* scoreConvert(long scoreTemp) {
 
   for (int i = counter - 1; i >= 0; i--) {
     if (arr[i] == 1) {
-      int bitShifter = i / 7;
-      int bit = i % 7;
+      long bitShifter = i / 7;
+      long bit = i % 7;
       binary[bitShifter][bit] = 1;
     }
   }
 
   for (int i = 0; i < 4; i++) {
-    int decimal = 255;
-    for (int j = 0 ; j < 7 ; j++) {
+    long decimal = 255;
+    for (long j = 0 ; j < 7 ; j++) {
       if (binary[i][j] == 0) {
         decimal -= customPower(6 - j);
       }
@@ -270,7 +269,7 @@ int* scoreConvert(long scoreTemp) {
   return scoreResult;
 }
 
-void displayBitShifter(byte dataOut, int bitShifter) {
+void displayBitShifter(byte dataOut, long bitShifter) {
 
   bool pinState;
 
@@ -296,7 +295,7 @@ void displayBitShifter(byte dataOut, int bitShifter) {
 }
 
 void displayScore() {
-  int* converted = scoreConvert(score);
+  long* converted = scoreConvert(score);
 
   for (int i = 0; i < 4; i++) {
     displayBitShifter(converted[i], i);
@@ -304,10 +303,12 @@ void displayScore() {
 }
 
 void renderDifficulty() {
-  int base = difficulty * 4;
-  int toConvert[] = {base, base + 1, base + 2, base + 3};
+  long base = difficulty * 4;
+  long toConvert[] = {base, base + 1, base + 3, base + 2};
+  Serial.begin(9600);
+  Serial.println(base);
 
-  int* converted = convert(toConvert);
+  long* converted = convert(toConvert);
 
   for (int i = 0; i < 4; i++) {
     displayBitShifter(converted[i], i);
@@ -315,7 +316,7 @@ void renderDifficulty() {
 }
 
 void gameMain() {
-  if (!lastInteractState && interactState) {
+  if (!lastlongeractState && longeractState) {
     difficulty++;
     difficulty %= 7;
     renderDifficulty();
@@ -327,8 +328,8 @@ void gameMain() {
 
 void gameRun() {
   if (currentTime - gameRunLR >= speeds[difficulty] - difficultyAdjustment * 1.5) {   
-    int toConvert[] = {currentLed, targetLed, targetLedS};
-    int* converted = convert(toConvert);
+    long toConvert[] = {currentLed, targetLed, targetLedS};
+    long* converted = convert(toConvert);
 
     for (int i = 0; i < 4; i++) {
       displayBitShifter(converted[i], i);
@@ -336,10 +337,12 @@ void gameRun() {
 
     if (clockwise) {
       currentLed++;
+      currentLed %= 28;
     } else {
       currentLed += 27;
+      currentLed %= 28;
     }
-    currentLed %= 28;
+    
 
     if (clockwise && currentLed == (targetLedS + 1) % 28 || !clockwise && currentLed == (targetLedS + 27) % 28) {
       advanceGame();
@@ -351,7 +354,7 @@ void gameRun() {
     gameRunLR = currentTime;
   }
 
-  if (!lastInteractState && interactState) {
+  if (!lastlongeractState && longeractState) {
     if (currentLed == targetLed || currentLed == targetLedS) {
       score += scoreAddition;
       scoreAddition += difficulty;
@@ -372,7 +375,7 @@ void gameOver() {
     renderDifficulty();
     resetGame();
   }
-  if (!lastInteractState && interactState) {
+  if (!lastlongeractState && longeractState) {
     resetMusic();
   }
 }
@@ -381,7 +384,7 @@ void loop() {
   currentTime = millis();
 
   startState = digitalRead(startPin);
-  interactState = digitalRead(interactPin);
+  longeractState = digitalRead(longeractPin);
 
   playMusic();
 
@@ -396,5 +399,5 @@ void loop() {
   }
 
   lastStartState = startState;
-  lastInteractState = interactState;
+  lastlongeractState = longeractState;
 }
