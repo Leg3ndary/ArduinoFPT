@@ -138,7 +138,7 @@ void setup() {
 
 void resetGame() {
   score = 0;
-  scoreAddition = difficulty + 1;
+  scoreAddition = (difficulty + 1) * (difficulty + 1);
   difficultyAdjustment = 0;
   clockwise = true;
 
