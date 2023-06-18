@@ -213,9 +213,9 @@ long* convert(long* leds) {
   };
 
   for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]) + 3; i++) {
-    long bitShifter = leds[i] / 7;
+    long shiftRegister = leds[i] / 7;
     long bit = leds[i] % 7;
-    binary[bitShifter][bit] = 1;
+    binary[shiftRegister][bit] = 1;
   }
 
   for (int i = 0; i < 4; i++) {
@@ -250,9 +250,9 @@ long* scoreConvert(long scoreTemp) {
 
   for (int i = counter - 1; i >= 0; i--) {
     if (arr[i] == 1) {
-      long bitShifter = i / 7;
+      long shiftRegister = i / 7;
       long bit = i % 7;
-      binary[bitShifter][bit] = 1;
+      binary[shiftRegister][bit] = 1;
     }
   }
 
@@ -269,15 +269,15 @@ long* scoreConvert(long scoreTemp) {
   return scoreResult;
 }
 
-void displayBitShifter(byte dataOut, long bitShifter) {
+void displayShiftRegister(byte dataOut, long shiftRegister) {
   bool pinState;
 
-  digitalWrite(latchPins[bitShifter], LOW);
-  digitalWrite(dataPins[bitShifter], LOW);
-  digitalWrite(clockPins[bitShifter], LOW);
+  digitalWrite(latchPins[shiftRegister], LOW);
+  digitalWrite(dataPins[shiftRegister], LOW);
+  digitalWrite(clockPins[shiftRegister], LOW);
 
   for (int i = 0; i <= 7; i++) {
-    digitalWrite(clockPins[bitShifter], LOW);
+    digitalWrite(clockPins[shiftRegister], LOW);
 
     if (dataOut & (1 << i)) {
       pinState = HIGH;
@@ -285,19 +285,19 @@ void displayBitShifter(byte dataOut, long bitShifter) {
       pinState = LOW;
     }
 
-    digitalWrite(dataPins[bitShifter], pinState);
-    digitalWrite(clockPins[bitShifter], HIGH);
+    digitalWrite(dataPins[shiftRegister], pinState);
+    digitalWrite(clockPins[shiftRegister], HIGH);
   }
 
-  digitalWrite(clockPins[bitShifter], LOW);
-  digitalWrite(latchPins[bitShifter], HIGH);
+  digitalWrite(clockPins[shiftRegister], LOW);
+  digitalWrite(latchPins[shiftRegister], HIGH);
 }
 
 void displayScore() {
   long* converted = scoreConvert(score);
 
   for (int i = 0; i < 4; i++) {
-    displayBitShifter(converted[i], i);
+    displayShiftRegister(converted[i], i);
   }
 }
 
@@ -310,7 +310,7 @@ void renderDifficulty() {
   long* converted = convert(toConvert);
 
   for (int i = 0; i < 4; i++) {
-    displayBitShifter(converted[i], i);
+    displayShiftRegister(converted[i], i);
   }
 }
 
@@ -331,7 +331,7 @@ void gameRun() {
     long* converted = convert(toConvert);
 
     for (int i = 0; i < 4; i++) {
-      displayBitShifter(converted[i], i);
+      displayShiftRegister(converted[i], i);
     }
 
     if (clockwise) {
