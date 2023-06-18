@@ -39,7 +39,7 @@ const long dataPins[4] = {13, 10, 7, 4};
 const long latchPins[4] = {12, 9, 6, 3};
 const long clockPins[4] = {11, 8, 5, 2};
 const long startPin = 14;
-const long longeractPin = 15;
+const long interactPin = 15;
 const long seedPin = 18;
 const long speakerPin = 19;
 
@@ -113,8 +113,8 @@ long targetLedS = targetLed + 1;
 
 byte startState = LOW;
 byte lastStartState = LOW;
-byte longeractState = LOW;
-byte lastlongeractState = LOW;
+byte interactState = LOW;
+byte lastInteractState = LOW;
 
 long gameRunLR = 0;
 long musicPlayLR = 0;
@@ -128,7 +128,7 @@ void setup() {
     pinMode(clockPins[i], OUTPUT);
   }
   pinMode(startPin, INPUT);
-  pinMode(longeractPin, INPUT);
+  pinMode(interactPin, INPUT);
   pinMode(speakerPin, OUTPUT);
 
   randomSeed(analogRead(seedPin));
@@ -304,8 +304,6 @@ void displayScore() {
 void renderDifficulty() {
   long base = difficulty * 4;
   long toConvert[] = {base, base + 1, base + 3, base + 2};
-  Serial.begin(9600);
-  Serial.println(base);
 
   long* converted = convert(toConvert);
 
@@ -315,7 +313,7 @@ void renderDifficulty() {
 }
 
 void gameMain() {
-  if (!lastlongeractState && longeractState) {
+  if (!lastInteractState && interactState) {
     difficulty++;
     difficulty %= 7;
     renderDifficulty();
@@ -353,7 +351,7 @@ void gameRun() {
     gameRunLR = currentTime;
   }
 
-  if (!lastlongeractState && longeractState) {
+  if (!lastInteractState && interactState) {
     if (currentLed == targetLed || currentLed == targetLedS) {
       score += scoreAddition;
       scoreAddition += difficulty;
@@ -374,7 +372,7 @@ void gameOver() {
     renderDifficulty();
     resetGame();
   }
-  if (!lastlongeractState && longeractState) {
+  if (!lastInteractState && interactState) {
     resetMusic();
   }
 }
@@ -383,7 +381,7 @@ void loop() {
   currentTime = millis();
 
   startState = digitalRead(startPin);
-  longeractState = digitalRead(longeractPin);
+  interactState = digitalRead(interactPin);
 
   playMusic();
 
@@ -398,5 +396,5 @@ void loop() {
   }
 
   lastStartState = startState;
-  lastlongeractState = longeractState;
+  lastInteractState = interactState;
 }
