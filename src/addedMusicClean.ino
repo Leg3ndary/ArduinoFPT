@@ -114,7 +114,11 @@ long targetLedS = targetLed + 1;
 byte startState = LOW;
 byte lastStartState = LOW;
 byte interactState = LOW;
+<<<<<<< HEAD
 byte lastinteractState = LOW;
+=======
+byte lastInteractState = LOW;
+>>>>>>> 896ecfb09a31c56a25796271d7d9a6ebd053fa62
 
 long gameRunLR = 0;
 long musicPlayLR = 0;
@@ -205,9 +209,9 @@ long* convert(long* leds) {
   };
 
   for (int i = 0; i <= sizeof(leds) / sizeof(leds[0]) + 3; i++) {
-    long bitShifter = leds[i] / 7;
+    long shiftRegister = leds[i] / 7;
     long bit = leds[i] % 7;
-    binary[bitShifter][bit] = 1;
+    binary[shiftRegister][bit] = 1;
   }
 
   for (int i = 0; i < 4; i++) {
@@ -242,9 +246,9 @@ long* scoreConvert(long scoreTemp) {
 
   for (int i = counter - 1; i >= 0; i--) {
     if (arr[i] == 1) {
-      long bitShifter = i / 7;
+      long shiftRegister = i / 7;
       long bit = i % 7;
-      binary[bitShifter][bit] = 1;
+      binary[shiftRegister][bit] = 1;
     }
   }
 
@@ -261,16 +265,15 @@ long* scoreConvert(long scoreTemp) {
   return scoreResult;
 }
 
-void displayBitShifter(byte dataOut, long bitShifter) {
-
+void displayShiftRegister(byte dataOut, long shiftRegister) {
   bool pinState;
 
-  digitalWrite(latchPins[bitShifter], LOW);
-  digitalWrite(dataPins[bitShifter], LOW);
-  digitalWrite(clockPins[bitShifter], LOW);
+  digitalWrite(latchPins[shiftRegister], LOW);
+  digitalWrite(dataPins[shiftRegister], LOW);
+  digitalWrite(clockPins[shiftRegister], LOW);
 
   for (int i = 0; i <= 7; i++) {
-    digitalWrite(clockPins[bitShifter], LOW);
+    digitalWrite(clockPins[shiftRegister], LOW);
 
     if (dataOut & (1 << i)) {
       pinState = HIGH;
@@ -278,37 +281,39 @@ void displayBitShifter(byte dataOut, long bitShifter) {
       pinState = LOW;
     }
 
-    digitalWrite(dataPins[bitShifter], pinState);
-    digitalWrite(clockPins[bitShifter], HIGH);
+    digitalWrite(dataPins[shiftRegister], pinState);
+    digitalWrite(clockPins[shiftRegister], HIGH);
   }
 
-  digitalWrite(clockPins[bitShifter], LOW);
-  digitalWrite(latchPins[bitShifter], HIGH);
+  digitalWrite(clockPins[shiftRegister], LOW);
+  digitalWrite(latchPins[shiftRegister], HIGH);
 }
 
 void displayScore() {
   long* converted = scoreConvert(score);
 
   for (int i = 0; i < 4; i++) {
-    displayBitShifter(converted[i], i);
+    displayShiftRegister(converted[i], i);
   }
 }
 
 void renderDifficulty() {
   long base = difficulty * 4;
   long toConvert[] = {base, base + 1, base + 3, base + 2};
-  Serial.begin(9600);
-  Serial.println(base);
 
   long* converted = convert(toConvert);
 
   for (int i = 0; i < 4; i++) {
-    displayBitShifter(converted[i], i);
+    displayShiftRegister(converted[i], i);
   }
 }
 
 void gameMain() {
+<<<<<<< HEAD
   if (!lastinteractState && interactState) {
+=======
+  if (!lastInteractState && interactState) {
+>>>>>>> 896ecfb09a31c56a25796271d7d9a6ebd053fa62
     difficulty++;
     difficulty %= 7;
     renderDifficulty();
@@ -324,7 +329,7 @@ void gameRun() {
     long* converted = convert(toConvert);
 
     for (int i = 0; i < 4; i++) {
-      displayBitShifter(converted[i], i);
+      displayShiftRegister(converted[i], i);
     }
 
     if (clockwise) {
@@ -346,7 +351,11 @@ void gameRun() {
     gameRunLR = currentTime;
   }
 
+<<<<<<< HEAD
   if (!lastinteractState && interactState) {
+=======
+  if (!lastInteractState && interactState) {
+>>>>>>> 896ecfb09a31c56a25796271d7d9a6ebd053fa62
     if (currentLed == targetLed || currentLed == targetLedS) {
       score += scoreAddition;
       scoreAddition += difficulty;
@@ -367,7 +376,11 @@ void gameOver() {
     renderDifficulty();
     resetGame();
   }
+<<<<<<< HEAD
   if (!lastinteractState && interactState) {
+=======
+  if (!lastInteractState && interactState) {
+>>>>>>> 896ecfb09a31c56a25796271d7d9a6ebd053fa62
     resetMusic();
   }
 }
@@ -391,5 +404,9 @@ void loop() {
   }
 
   lastStartState = startState;
+<<<<<<< HEAD
   lastinteractState = interactState;
+=======
+  lastInteractState = interactState;
+>>>>>>> 896ecfb09a31c56a25796271d7d9a6ebd053fa62
 }
